@@ -23,7 +23,7 @@
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{background:#dde3f0;color:var(--text-main);font-family:'Cormorant Garamond',serif;overflow-x:hidden;min-height:100vh}
+  body{background:#dde3f0;color:var(--text-main);font-family:'Times New Roman',serif;overflow-x:hidden;min-height:100vh}
   #bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 
   /* ── NAV ── */
@@ -176,7 +176,7 @@
 <div class="page active" id="quizPage">
   <div class="quiz-wrap" id="quizWrap"></div>
   <footer>
-    <p>Приозерский политехнический колледж · Россия</p>
+    <p>Викторина · Россия</p>
   </footer>
 </div>
 
@@ -184,7 +184,7 @@
 <div class="page" id="resultsPage">
   <div class="results-wrap" id="resultsWrap"></div>
   <footer>
-    <p>Приозерский политехнический колледж · Россия</p>
+    <p>С уважением колледжи России</p>
   </footer>
 </div>
 
@@ -292,7 +292,7 @@ function renderQ(wrap,cat,doneQ){
     <div class="q-card">
       <div class="qc tl"></div><div class="qc tr"></div>
       <div class="qc bl"></div><div class="qc br"></div>
-      <div class="q-num">Q${String(doneQ+1).padStart(2,'0')} · РАЗДЕЛ ${S.catI+1}</div>
+      <div class="q-num">${String(doneQ+1).padStart(2,'0')} · РАЗДЕЛ ${S.catI+1}</div>
       <div class="q-text">${q.q}</div>
       <div class="options" id="opts">
         ${q.opts.map((o,i)=>`

@@ -59,7 +59,9 @@
   .flag-by .s1{flex:2;background:#CF101A}.flag-by .s2{flex:1;background:#009849}
   .flag-ru .s1{flex:1;background:#FFFFFF}.flag-ru .s2{flex:1;background:#003580}.flag-ru .s3{flex:1;background:#CC0000}
   .connector{position:relative;width:52px;height:2px;background:linear-gradient(90deg,#CC0000,var(--gold),#003580)}
+  .connector2{position:relative;width:52px;height:2px;background:linear-gradient(90deg,#003580,var(--gold),#003580)}
   .connector::after{content:'✦';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--gold);font-size:16px;padding:0 6px;text-shadow:0 0 12px rgba(201,146,10,.7)}
+  .connector2::after{content:'✦';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--gold);font-size:16px;padding:0 6px;text-shadow:0 0 12px rgba(201,146,10,.7)}
   .date-badge{font-size:16px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-dim);padding:10px 32px;margin-bottom:32px;background:rgba(255,255,255,.32);backdrop-filter:blur(6px);opacity:0;animation:fadeUp 1s .6s forwards}
   .hero-title{font-family:'Playfair Display',serif;font-size:clamp(44px,7.5vw,96px);font-weight:900;line-height:1.03;color:var(--text-main);margin-bottom:24px;opacity:0;animation:fadeUp 1s .9s forwards;text-shadow:0 2px 20px rgba(255,255,255,.5)}
   .hero-title em{font-style:italic;color:#0a2a7a;display:block}
@@ -84,7 +86,7 @@
   .glass-card{background:rgba(255,255,255,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--card-border);border-radius:2px}
 
   /* COLLEGES */
-  .colleges-banner{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;padding:48px 36px;margin:48px 0}
+  .colleges-banner{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:20px;align-items:center;padding:48px 36px;margin:48px 0}
   .college-block{text-align:center}
   .college-country{font-size:12px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
   .college-name{font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,22px);font-weight:700;color:var(--text-main);line-height:1.35}
@@ -130,6 +132,7 @@
   @media(max-width:700px){
     .nav-quiz-pill{display:none}  
     .colleges-banner{grid-template-columns:1fr;gap:12px}
+    .colleges-banner .connector{display:none}
     .greeting-card{padding:40px 22px}
     .flags-row{gap:16px}
     .flag{width:86px;height:52px}
@@ -184,7 +187,7 @@
     </div>
   </div>
 
-  <div class="date-badge">2 апреля · День единения народов</div>
+  <div class="date-badge"><span style="font-size: 24px;">2</span> апреля · День единения народов</div>
 
   <h1 class="hero-title">
     Единство двух<br>народов.<br>
@@ -214,9 +217,15 @@
         <div class="college-country">Россия</div>
         <div class="college-name">Приозерский<small>политехнический колледж</small></div>
       </div>
+      <div class="connector2"></div>
       <div class="college-block">
         <div class="college-country">Беларусь</div>
         <div class="college-name">Могилевский государственный<small>политехнический колледж</small></div>
+      </div>
+      <div class="connector2"></div>
+      <div class="college-block">
+        <div class="college-country">Россия</div>
+        <div class="college-name">Хакасский<small>политехнический колледж</small></div>
       </div>
     </div>
 
@@ -324,7 +333,7 @@
       Мы — вместе, и это наша главная сила.
     </p>
     <div style="margin-top:48px;font-size:17px;letter-spacing:.38em;text-transform:uppercase;color:var(--gold)">
-      ✦ &nbsp;2 апреля&nbsp; ✦
+      ✦ &nbsp;<span style="font-size: 24px;">2</span> апреля&nbsp; ✦
     </div>
   </div>
 </section>
@@ -332,7 +341,7 @@
 <footer>
   <p>
     Поздравительный сайт создан коллективом<br>
-    Приозерского политехнического колледжа<br>
+     Приозёрского и Хакасского политехнических колледжей<br>
     Россия · С любовью и уважением
   </p>
 </footer>
