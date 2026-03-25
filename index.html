@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>День единения народов России и Беларуси</title>
+<title>День единения народов Беларуси и России</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --gold: #1a3f8f;
-    --gold-light: #4169c8;
-    --gold-dim: rgba(26,63,143,0.45);
-    --cream: #EFF3FB;
-    --white: #F7F9FF;
-    --text-main: #0A0C1C;
-    --text-soft: rgba(10,12,28,0.72);
-    --text-muted: rgba(10,12,28,0.48);
-    --card-border: rgba(26,63,143,0.28);
+    --gold: #C9920A;
+    --gold-light: #F2C94C;
+    --gold-dim: rgba(201,146,10,0.45);
+    --cream: #FDF6E3;
+    --white: #FFFDF7;
+    --text-main: #1C0A00;
+    --text-soft: rgba(28,10,0,0.72);
+    --text-muted: rgba(28,10,0,0.48);
+    --card-border: rgba(201,146,10,0.28);
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{background:#dde3f0;color:var(--text-main);font-family:'Cormorant Garamond',serif;overflow-x:hidden}
+  body{background:#e8dcc8;color:var(--text-main);font-family:'Cormorant Garamond',serif;overflow-x:hidden}
   #bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 
   /* NAVBAR */
@@ -58,13 +58,11 @@
   .flag-by-stripes{margin-left:18px;flex:1;display:flex;flex-direction:column}
   .flag-by .s1{flex:2;background:#CF101A}.flag-by .s2{flex:1;background:#009849}
   .flag-ru .s1{flex:1;background:#FFFFFF}.flag-ru .s2{flex:1;background:#003580}.flag-ru .s3{flex:1;background:#CC0000}
-  .connector{position:relative;width:52px;height:2px;background:linear-gradient(90deg,#CC0000,var(--gold),#003580)}
-  .connector2{position:relative;width:52px;height:2px;background:linear-gradient(90deg,#003580,var(--gold),#003580)}
+  .connector{position:relative;width:52px;height:2px;background:linear-gradient(90deg,#CF101A,var(--gold),#003580)}
   .connector::after{content:'✦';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--gold);font-size:16px;padding:0 6px;text-shadow:0 0 12px rgba(201,146,10,.7)}
-  .connector2::after{content:'✦';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--gold);font-size:16px;padding:0 6px;text-shadow:0 0 12px rgba(201,146,10,.7)}
   .date-badge{font-size:16px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-dim);padding:10px 32px;margin-bottom:32px;background:rgba(255,255,255,.32);backdrop-filter:blur(6px);opacity:0;animation:fadeUp 1s .6s forwards}
   .hero-title{font-family:'Playfair Display',serif;font-size:clamp(44px,7.5vw,96px);font-weight:900;line-height:1.03;color:var(--text-main);margin-bottom:24px;opacity:0;animation:fadeUp 1s .9s forwards;text-shadow:0 2px 20px rgba(255,255,255,.5)}
-  .hero-title em{font-style:italic;color:#0a2a7a;display:block}
+  .hero-title em{font-style:italic;color:#8B1A00;display:block}
   .hero-sub{font-size:clamp(19px,2.4vw,25px);font-weight:300;color:var(--text-soft);max-width:560px;line-height:1.85;opacity:0;animation:fadeUp 1s 1.1s forwards}
   .scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--gold);font-size:11px;letter-spacing:.25em;text-transform:uppercase;animation:bob 2.5s ease-in-out infinite}
   .scroll-hint svg{width:18px;height:18px}
@@ -79,14 +77,14 @@
   .container{max-width:900px;margin:0 auto}
   .section-eyebrow{display:block;font-size:14px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
   .section-heading{font-family:'Playfair Display',serif;font-size:clamp(32px,4.5vw,54px);font-weight:700;line-height:1.12;color:var(--text-main);margin-bottom:28px}
-  .section-heading em{font-style:italic;color:#0a2a7a}
+  .section-heading em{font-style:italic;color:#8B1A00}
   .body-text{font-size:clamp(18px,2vw,22px);font-weight:300;line-height:1.9;color:var(--text-soft);max-width:720px}
 
   /* GLASS */
   .glass-card{background:rgba(255,255,255,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--card-border);border-radius:2px}
 
   /* COLLEGES */
-  .colleges-banner{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:20px;align-items:center;padding:48px 36px;margin:48px 0}
+  .colleges-banner{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;padding:48px 36px;margin:48px 0}
   .college-block{text-align:center}
   .college-country{font-size:12px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
   .college-name{font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,22px);font-weight:700;color:var(--text-main);line-height:1.35}
@@ -127,12 +125,11 @@
   @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
   @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 
-  .nav-quiz-pill{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#FFFDF7;background:#1a3f8f;border-radius:8px;padding:8px 18px;text-decoration:none;letter-spacing:.05em;transition:background .2s,transform .2s,box-shadow .2s;box-shadow:0 3px 12px rgba(122,40,0,.25)}
-  .nav-quiz-pill:hover{background:#0d2660;transform:translateY(-1px);box-shadow:0 6px 20px rgba(122,40,0,.35)}
+  .nav-quiz-pill{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#FFFDF7;background:#7A2800;border-radius:8px;padding:8px 18px;text-decoration:none;letter-spacing:.05em;transition:background .2s,transform .2s,box-shadow .2s;box-shadow:0 3px 12px rgba(122,40,0,.25)}
+  .nav-quiz-pill:hover{background:#5C1D00;transform:translateY(-1px);box-shadow:0 6px 20px rgba(122,40,0,.35)}
   @media(max-width:700px){
     .nav-quiz-pill{display:none}  
     .colleges-banner{grid-template-columns:1fr;gap:12px}
-    .colleges-banner .connector{display:none}
     .greeting-card{padding:40px 22px}
     .flags-row{gap:16px}
     .flag{width:86px;height:52px}
@@ -187,16 +184,16 @@
     </div>
   </div>
 
-  <div class="date-badge"><span style="font-size: 24px;">2</span> апреля · День единения народов</div>
+  <div class="date-badge">2 апреля · День единения народов</div>
 
   <h1 class="hero-title">
-    Единство двух<br>народов.<br>
-    <em>Одна история.</em>
+    Братство двух<br>народов.<br>
+    <em>Одна судьба.</em>
   </h1>
 
   <p class="hero-sub">
-    Россия и Беларусь — два народа с общей историей, общим языком и общим будущим.
-    Этот день — символ дружбы, которую не разорвать.
+    В этот день мы чтим нерушимую связь белорусского и российского народов —
+    связь, рождённую историей и закалённую временем.
   </p>
 
   <div class="scroll-hint">
@@ -214,18 +211,12 @@
   <div class="container">
     <div class="colleges-banner glass-card">
       <div class="college-block">
-        <div class="college-country">Россия</div>
-        <div class="college-name">Приозерский<small>политехнический колледж</small></div>
-      </div>
-      <div class="connector2"></div>
-      <div class="college-block">
         <div class="college-country">Беларусь</div>
         <div class="college-name">Могилевский государственный<small>политехнический колледж</small></div>
-      </div>
-      <div class="connector2"></div>
+      </div><br>
       <div class="college-block">
         <div class="college-country">Россия</div>
-        <div class="college-name">Хакасский<small>политехнический колледж</small></div>
+        <div class="college-name">Приозерский<small>политехнический колледж</small></div>
       </div>
     </div>
 
@@ -233,13 +224,13 @@
       <div class="corner tl"></div><div class="corner tr"></div>
       <div class="corner bl"></div><div class="corner br"></div>
       <p class="greeting-quote">
-        «Дорогие друзья и коллеги! В этот праздничный день мы, из России, шлём вам
-        самые искренние поздравления. Союз наших народов — это не просто политика,
-        это живая история, общая память и неразрывная связь сердец.»
+        «Дорогие коллеги и друзья! В светлый праздник единения двух братских народов
+        мы шлём вам самые тёплые поздравления из Беларуси. Пусть дружба наших народов
+        крепнет с каждым годом — как крепнет дерево, питаясь общими корнями.»
       </p>
       <div class="greeting-sig">
         С сердечными поздравлениями<br>
-        От имени коллективов Приозерского и Хакасского политехнических колледжей
+        Коллектив Могилевского государственного политехнического колледжа
       </div>
     </div>
   </div>
@@ -284,7 +275,7 @@
 <section id="values">
   <div class="container">
     <span class="section-eyebrow">Что нас объединяет</span>
-    <h2 class="section-heading">Наши общие <em>ценности</em></h2>
+    <h2 class="section-heading">Общие <em>ценности</em></h2>
     <div class="sym-grid">
       <div class="sym-card"><span class="sym-icon">📚</span><div class="sym-title">Образование</div><div class="sym-desc">Взаимное признание дипломов и единые образовательные стандарты открывают двери для студентов обеих стран.</div></div>
       <div class="sym-card"><span class="sym-icon">🗣️</span><div class="sym-title">Язык</div><div class="sym-desc">Общий язык общения и близкородственные языки — живое воплощение нашего культурного родства.</div></div>
@@ -306,12 +297,12 @@
     <div class="glass-card glass-card-cta" style="display:flex;align-items:center;justify-content:space-between;gap:32px;padding:48px 52px;flex-wrap:wrap">
       <div>
         <span style="display:block;font-size:11px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Проверьте себя</span>
-        <h2 style="font-family:'Playfair Display',serif;font-size:clamp(26px,3.5vw,40px);font-weight:700;line-height:1.2;color:var(--text-main);margin-bottom:12px">Насколько хорошо вы<br>знаете <em style="font-style:italic;color:#0a2a7a">Россию?</em></h2>
+        <h2 style="font-family:'Playfair Display',serif;font-size:clamp(26px,3.5vw,40px);font-weight:700;line-height:1.2;color:var(--text-main);margin-bottom:12px">Насколько хорошо вы<br>знаете <em style="font-style:italic;color:#8B1A00">Беларусь?</em></h2>
         <p style="font-size:18px;font-weight:300;color:var(--text-soft);line-height:1.2;max-width:420px">20 вопросов о достопримечательностях, кулинарии, традициях и праздниках страны-сестры.</p>
       </div>
       <div style="text-align:center;flex-shrink:0">
         <div style="font-size:64px;margin-bottom:16px;display:block">🏆</div>
-        <a href="quiz.html" style="display:inline-flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#FFFDF7;background:#1a3f8f;padding:16px 40px;text-decoration:none;border-radius:10px;letter-spacing:.06em;box-shadow:0 6px 24px rgba(26,63,143,.3);transition:background .2s,transform .2s,box-shadow .2s" onmouseover="this.style.background='#0d2660';this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 32px rgba(26,63,143,.4)'" onmouseout="this.style.background='#1a3f8f';this.style.transform='translateY(0)';this.style.boxShadow='0 6px 24px rgba(26,63,143,.3)'">
+        <a href="quiz.html" style="display:inline-flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#FFFDF7;background:#7A2800;padding:16px 40px;text-decoration:none;border-radius:10px;letter-spacing:.06em;box-shadow:0 6px 24px rgba(122,40,0,.3);transition:background .2s,transform .2s,box-shadow .2s" onmouseover="this.style.background='#5C1D00';this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 32px rgba(122,40,0,.4)'" onmouseout="this.style.background='#7A2800';this.style.transform='translateY(0)';this.style.boxShadow='0 6px 24px rgba(122,40,0,.3)'">
           Начать викторину →
         </a>
         <p style="font-size:16px;letter-spacing:.22em;color:var(--text-muted);margin-top:12px">5 тем · 20 вопросов</p>
@@ -328,12 +319,12 @@
       Пусть дружба живёт<br><em>в веках</em>
     </h2>
     <p class="body-text" style="margin:0 auto;text-align:center">
-      От всего сердца поздравляем с Днём единения народов России и Беларуси!
-      Желаем мира, процветания и новых достижений в учёбе и работе.
-      Мы — вместе, и это наша главная сила.
+      От всего сердца поздравляем вас с Днём единения народов Беларуси и России!
+      Желаем мира, процветания и успехов в учёбе и работе.
+      Наша дружба — это наша сила.
     </p>
-    <div style="margin-top:48px;font-size:17px;letter-spacing:.38em;text-transform:uppercase;color:var(--gold)">
-      ✦ &nbsp;<span style="font-size: 24px;">2</span> апреля&nbsp; ✦
+    <div style="margin-top:48px;font-size:14px;letter-spacing:.38em;text-transform:uppercase;color:var(--gold)">
+      ✦ &nbsp;2 апреля&nbsp; ✦
     </div>
   </div>
 </section>
@@ -341,8 +332,8 @@
 <footer>
   <p>
     Поздравительный сайт создан коллективом<br>
-     Приозёрского и Хакасского политехнических колледжей<br>
-    Россия · С любовью и уважением
+    Могилевского государственного политехнического колледжа<br>
+    Беларусь · С любовью и уважением
   </p>
 </footer>
 
@@ -387,7 +378,7 @@ class Sparkle {
     if (this.life >= this.maxLife || this.y < -10) this.reset(false);
     ctx.save(); ctx.globalAlpha = this.alpha;
     ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
-    ctx.fillStyle = this.gold ? '#1a3f8f' : 'rgba(200,215,255,0.9)';
+    ctx.fillStyle = this.gold ? '#C9920A' : 'rgba(255,255,225,0.9)';
     ctx.fill(); ctx.restore();
   }
 }
@@ -402,24 +393,24 @@ const sparkles = Array.from({length: 170}, () => new Sparkle());
   ctx.clearRect(0, 0, W, H);
 
   /* Parchment base */
-  ctx.fillStyle = '#D8E0F0';
+  ctx.fillStyle = '#EDE0C4';
   ctx.fillRect(0, 0, W, H);
 
-  /* RU blue — left */
-  blob(W*(0.12 + s*0.10), H*(0.20 + c*0.10),  W*0.50, 0,53,128,   0.25);
-  /* RU red — lower-left */
-  blob(W*(0.10 + c*0.07), H*(0.78 + s*0.08),  W*0.36, 204,0,0,    0.20);
-  /* RU white/pale — centre-top */
-  blob(W*(0.50 + s2*0.05), H*(0.08 + c2*0.06),W*0.40, 200,210,240,0.32);
+  /* BY red — left, drifting */
+  blob(W*(0.14 + s*0.11), H*(0.22 + c*0.1),  W*0.42, 207,16,26,  0.20);
+  /* BY green — lower-left */
+  blob(W*(0.08 + c*0.07), H*(0.76 + s*0.09),  W*0.30, 0,152,73,  0.15);
+  /* RU white / pale — centre-top */
+  blob(W*(0.5  + s2*0.05), H*(0.1 + c2*0.06), W*0.36, 230,210,180,0.28);
   /* RU blue — right */
-  blob(W*(0.82 + c*0.08),  H*(0.30 + s*0.10), W*0.48, 0,53,128,   0.28);
+  blob(W*(0.80 + c*0.09),  H*(0.28 + s*0.11), W*0.42, 0,53,128,  0.18);
   /* RU red — lower-right */
-  blob(W*(0.85 + s2*0.07), H*(0.82 + c2*0.06),W*0.36, 204,0,0,    0.20);
+  blob(W*(0.84 + s2*0.08), H*(0.80 + c2*0.07),W*0.33, 204,0,0,   0.17);
   /* Warm centre glow */
   const gw = ctx.createRadialGradient(W/2, H*0.48, 0, W/2, H*0.48, W*0.52);
-  gw.addColorStop(0,   'rgba(235,240,255,0.80)');
-  gw.addColorStop(0.55,'rgba(235,240,255,0.30)');
-  gw.addColorStop(1,   'rgba(235,240,255,0)');
+  gw.addColorStop(0,   'rgba(255,252,240,0.78)');
+  gw.addColorStop(0.55,'rgba(255,252,240,0.28)');
+  gw.addColorStop(1,   'rgba(255,252,240,0)');
   ctx.fillStyle = gw; ctx.fillRect(0, 0, W, H);
 
   sparkles.forEach(p => p.step());
