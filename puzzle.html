@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Достопримечательности России — Пазлы</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#C9920A;--gold-light:#F2C94C;--gold-dim:rgba(201,146,10,0.45);--cream:#E4EFF8;--white:#F0F6FC;--text-main:#0A1A2E;--text-soft:rgba(10,26,46,0.72);--text-muted:rgba(10,26,46,0.48);--card-border:rgba(0,53,128,0.22)}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:#C4D9EE;color:var(--text-main);font-family:'Cormorant Garamond',serif;overflow-x:hidden}
+  #bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 44px;height:64px;background:rgba(232,243,252,0.75);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(0,53,128,0.18);transition:background .3s,box-shadow .3s}
+  nav.scrolled{background:rgba(232,243,252,0.97);box-shadow:0 2px 20px rgba(0,0,0,0.08)}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text-main);letter-spacing:.02em;display:flex;align-items:center;gap:10px;text-decoration:none}
+  .nav-logo-flags{display:flex;gap:3px;align-items:center}
+  .nmf{width:22px;height:14px;border-radius:1px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.2);flex-shrink:0}
+  .nmf-by{position:relative}.nmf-by-bar{position:absolute;left:0;top:0;bottom:0;width:4px;background:repeating-linear-gradient(180deg,#CF101A 0 2px,#fff 2px 4px,#CF101A 4px 6px);z-index:1}
+  .nmf-by-s{margin-left:4px;flex:1;display:flex;flex-direction:column}.nmf-by .a{flex:2;background:#CF101A}.nmf-by .b{flex:1;background:#009849}
+  .nmf-ru .a{flex:1;background:#fff}.nmf-ru .b{flex:1;background:#003580}.nmf-ru .c{flex:1;background:#CC0000}
+  .nav-links{display:flex;gap:20px;list-style:none;align-items:center;position:absolute;left:50%;transform:translateX(-50%)}
+  .nav-links a{font-size:13px;font-weight:400;letter-spacing:.13em;text-transform:uppercase;color:var(--text-soft);text-decoration:none;position:relative;transition:color .2s}
+  .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:100%;height:1px;background:var(--gold);transition:right .3s}
+  .nav-links a:hover{color:var(--text-main)}.nav-links a:hover::after{right:0}
+  .nav-links a.active{color:var(--gold)}.nav-links a.active::after{right:0}
+  .nav-date{font-size:18px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+  .nav-burger span{display:block;width:22px;height:1.5px;background:var(--text-main)}
+  @media(max-width:700px){.nav-links,.nav-date{display:none}.nav-links.open{display:flex;flex-direction:column;gap:0;position:fixed;top:64px;left:0;right:0;width:100%;transform:none;background:rgba(232,243,252,.97);z-index:99;border-bottom:1px solid var(--card-border);padding:16px 32px 24px}.nav-links.open li a{font-size:17px;padding:10px 0;display:block}.nav-burger{display:flex}nav{padding:0 20px}}
+  .hero{position:relative;min-height:52vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 24px 70px;z-index:1}
+  .flags-row{display:flex;align-items:center;gap:28px;margin-bottom:36px;opacity:0;animation:fadeUp 1s .3s forwards}
+  .flag{width:116px;height:70px;border-radius:4px;overflow:hidden;box-shadow:0 6px 28px rgba(0,0,0,.22),0 0 0 1px rgba(255,255,255,.4);flex-shrink:0;display:flex;flex-direction:column}
+  .flag-by{position:relative}.flag-by-bar{position:absolute;left:0;top:0;bottom:0;width:18px;background:repeating-linear-gradient(180deg,#CF101A 0 5px,#fff 5px 10px,#CF101A 10px 15px);z-index:1}
+  .flag-by-stripes{margin-left:18px;flex:1;display:flex;flex-direction:column}.flag-by .s1{flex:2;background:#CF101A}.flag-by .s2{flex:1;background:#009849}
+  .flag-by-img{width:116px;height:70px;border-radius:4px;object-fit:cover;object-position:left center;box-shadow:0 6px 28px rgba(0,0,0,.22),0 0 0 1px rgba(255,255,255,.4);flex-shrink:0}
+  .flag-ru .s1{flex:1;background:#FFFFFF}.flag-ru .s2{flex:1;background:#003580}.flag-ru .s3{flex:1;background:#CC0000}
+  .connector{position:relative;width:52px;height:2px;background:linear-gradient(90deg,#CF101A,var(--gold),#003580)}.connector::after{content:'✦';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--gold);font-size:16px;padding:0 6px;text-shadow:0 0 12px rgba(201,146,10,.7)}
+  .date-badge{font-size:13px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-dim);padding:10px 32px;margin-bottom:32px;background:rgba(255,255,255,.32);backdrop-filter:blur(6px);opacity:0;animation:fadeUp 1s .6s forwards}
+  .hero-title{font-family:'Playfair Display',serif;font-size:clamp(36px,6vw,74px);font-weight:900;line-height:1.06;color:var(--text-main);margin-bottom:20px;opacity:0;animation:fadeUp 1s .9s forwards;text-shadow:0 2px 20px rgba(232,243,252,.55)}
+  .hero-title em{font-style:italic;color:#CC0000;display:block}
+  .hero-sub{font-size:clamp(17px,2vw,22px);font-weight:300;color:var(--text-soft);max-width:520px;line-height:1.85;opacity:0;animation:fadeUp 1s 1.1s forwards}
+  .divider{position:relative;z-index:1;text-align:center;padding:10px 0;color:var(--gold);font-size:20px;letter-spacing:14px}
+  .divider::before,.divider::after{content:'';position:absolute;top:50%;width:calc(50% - 80px);height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim))}.divider::before{left:0}.divider::after{right:0;transform:scaleX(-1)}
+  section{position:relative;z-index:1;padding:70px 24px}
+  .container{max-width:1100px;margin:0 auto}
+  .section-eyebrow{display:block;font-size:12px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+  .section-heading{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1.12;color:var(--text-main);margin-bottom:12px}
+  .section-heading em{font-style:italic;color:#CC0000}
+  .section-sub{font-size:clamp(16px,1.8vw,20px);font-weight:300;color:var(--text-soft);margin-bottom:52px;max-width:640px;line-height:1.8}
+  .glass-card{background:rgba(232,243,252,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--card-border);border-radius:2px}
+  .puzzle-tabs{display:flex;gap:3px;margin-bottom:48px;flex-wrap:wrap}
+  .puzzle-tab{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;padding:14px 28px;border:1px solid rgba(0,53,128,.25);background:rgba(232,243,252,.45);color:var(--text-soft);cursor:pointer;transition:all .25s;position:relative;backdrop-filter:blur(6px)}
+  .puzzle-tab::after{content:'';position:absolute;bottom:0;left:0;right:100%;height:2px;background:var(--gold);transition:right .3s}
+  .puzzle-tab:hover{background:rgba(232,243,252,.7);color:var(--text-main)}
+  .puzzle-tab.active{background:rgba(232,243,252,.85);color:var(--text-main);border-color:rgba(0,53,128,.4)}.puzzle-tab.active::after{right:0}
+  .puzzle-wrapper{display:none;opacity:0;transition:opacity .4s}.puzzle-wrapper.active{display:block}.puzzle-wrapper.visible{opacity:1}
+  .puzzle-layout{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start}
+  @media(max-width:860px){.puzzle-layout{grid-template-columns:1fr}}
+  .puzzle-canvas-label{font-size:11px;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:block}
+  .canvas-outer{position:relative;line-height:0}
+  canvas.puzzle-cv{display:block;width:100%;cursor:grab;border:1px solid var(--card-border);background:rgba(232,243,252,.40);backdrop-filter:blur(8px);box-shadow:0 8px 40px rgba(0,0,0,.12);touch-action:none}
+  canvas.puzzle-cv:active{cursor:grabbing}
+  .win-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(228,239,248,.92);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .5s;z-index:10;text-align:center;padding:24px}
+  .win-overlay.show{opacity:1;pointer-events:all}
+  .win-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--text-main);margin-bottom:20px}
+  .win-sub{font-size:17px;font-weight:300;color:var(--text-soft);margin-bottom:24px;line-height:1.2}
+  .puzzle-info-box{padding:32px 28px 28px}
+  .puzzle-landmark-name{font-family:'Playfair Display',serif;font-size:clamp(22px,2.8vw,32px);font-weight:700;color:var(--text-main);margin-bottom:10px;line-height:1.2}
+  .puzzle-landmark-name em{font-style:italic;color:#CC0000}
+  .puzzle-landmark-desc{font-size:clamp(15px,1.6vw,18px);font-weight:300;color:var(--text-soft);line-height:1.85;margin-bottom:24px}
+  .puzzle-meta{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+  .puzzle-meta-item{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+  .puzzle-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+  .btn-gold{font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:12px 28px;border:1px solid var(--gold-dim);background:rgba(201,146,10,.1);color:var(--gold);cursor:pointer;transition:all .25s}.btn-gold:hover{background:rgba(201,146,10,.22);border-color:var(--gold)}
+  .btn-solid{font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:12px 28px;border:1px solid var(--gold);background:var(--gold);color:#fff;cursor:pointer;transition:all .25s}.btn-solid:hover{background:#b07e06}
+  .difficulty-select{font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:.06em;padding:11px 32px 11px 14px;border:1px solid rgba(0,53,128,.25);background:rgba(232,243,252,.55);color:var(--text-main);cursor:pointer;outline:none;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9920A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-color:rgba(232,243,252,.55)}
+  .progress-wrap{margin-top:14px;display:flex;align-items:center;gap:14px}
+  .progress-bar-bg{flex:1;height:3px;background:rgba(0,53,128,.18);border-radius:2px}
+  .progress-bar-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .4s;width:0%}
+  .progress-label{font-size:12px;letter-spacing:.24em;color:var(--gold);min-width:42px;text-align:right}
+  .preview-label{font-size:11px;letter-spacing:.38em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;display:block}
+  .preview-img{max-width:160px;height:auto;border:1px solid var(--card-border);opacity:.5;transition:opacity .3s;display:block}.preview-img:hover{opacity:.9}
+  footer{position:relative;z-index:1;padding:44px 24px;text-align:center;border-top:1px solid rgba(0,53,128,.18);background:rgba(232,243,252,.40);backdrop-filter:blur(10px)}
+  footer p{font-size:15px;color:var(--text-muted);letter-spacing:.06em;line-height:2.2}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+  @media(max-width:620px){.flag{width:86px;height:52px}.flag-by-img{width:86px;height:52px}.flag-by-bar{width:14px}.flag-by-stripes{margin-left:14px}.puzzle-tabs{gap:2px}.puzzle-tab{font-size:12px;padding:10px 14px;letter-spacing:.08em}}
+  @media(max-width:600px){
+    .puzzle-layout{grid-template-columns:1fr!important}
+    .puzzle-tabs{flex-direction:column;gap:4px}
+    .puzzle-tab{padding:12px 16px;font-size:13px;letter-spacing:.08em}
+    .puzzle-controls{flex-wrap:wrap}
+    .section-sub{margin-bottom:28px}
+    section{padding:50px 16px}
+    .hero{padding:90px 16px 60px}
+  }
+</style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+
+<nav id="mainNav">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-flags">
+      <div class="nmf nmf-ru"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+    </div>
+    Культурное наследие
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" onclick="closeMenu()">Главная</a></li>
+    <li><a href="puzzle.html" class="active" onclick="closeMenu()">Пазлы</a></li>
+    <li><a href="quiz.html" onclick="closeMenu()">Тесты</a></li>
+  </ul>
+  <div class="nav-date">Россия</div>
+  <button class="nav-burger" id="burger" aria-label="Меню" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="hero" id="hero">
+  <div class="flags-row">
+    <div class="flag flag-ru" aria-label="Флаг России"><div class="s1"></div><div class="s2"></div><div class="s3"></div></div>
+  </div>
+  <div class="date-badge">Достопримечательности России</div>
+  <h1 class="hero-title">Собери пазл<br><em>узнай страну.</em></h1>
+  <p class="hero-sub">Три великих культурных памятника России. Соберите каждый пазл и откройте историю за фотографией.</p>
+</header>
+
+<div class="divider">✦ ✦ ✦</div>
+
+<section id="puzzle-section">
+  <div class="container">
+    <span class="section-eyebrow">Интерактивная игра</span>
+    <h2 class="section-heading">Пазлы <em>России</em></h2>
+    <p class="section-sub">Выберите достопримечательность, настройте сложность и собирайте пазл, перетаскивая фрагменты.</p>
+
+    <div class="puzzle-tabs">
+      <button class="puzzle-tab active" onclick="switchPuzzle(0)">Петергоф</button>
+      <button class="puzzle-tab" onclick="switchPuzzle(1)">Третьяковская галерея</button>
+      <button class="puzzle-tab" onclick="switchPuzzle(2)">Эрмитаж</button>
+    </div>
+
+    <div class="puzzle-wrapper active" id="pw0">
+      <div class="puzzle-layout">
+        <div>
+          <span class="puzzle-canvas-label">Перетаскивайте фрагменты на место</span>
+          <div class="canvas-outer" id="co0">
+            <canvas class="puzzle-cv" id="pc0"></canvas>
+            <div class="win-overlay" id="win0">
+              <div class="win-title">Пазл собран!</div>
+              <div class="win-sub">Петергоф — блистательная загородная<br>резиденция российских императоров.</div>
+              <button class="btn-gold" onclick="resetPuzzle(0)">Собрать заново</button>
+            </div>
+          </div>
+          <div class="progress-wrap"><div class="progress-bar-bg"><div class="progress-bar-fill" id="prg0"></div></div><div class="progress-label" id="prl0">0%</div></div>
+        </div>
+        <div class="puzzle-info-box glass-card">
+          <div class="puzzle-landmark-name">Великий<br><em>Петергоф</em></div>
+          <p class="puzzle-landmark-desc">Знаменитый дворцово-парковый ансамбль на южном берегу Финского залива. Петергоф славится своими уникальными фонтанами, регулярными парками и роскошными дворцами, являясь жемчужиной мирового барокко.</p>
+          <div class="puzzle-meta"><span class="puzzle-meta-item">📍 Санкт-Петербург</span><span class="puzzle-meta-item">📅 1710</span><span class="puzzle-meta-item">⛲ 147 фонтанов</span></div>
+          <div class="puzzle-controls">
+            <select class="difficulty-select" id="df0" onchange="changeDiff(0)"><option value="3">3×3 — Легко</option><option value="4" selected>4×4 — Средне</option><option value="5">5×5 — Сложно</option></select>
+            <button class="btn-gold" onclick="resetPuzzle(0)">↺ Перемешать</button>
+            <button class="btn-solid" onclick="showHint(0)">👁 Подсказка</button>
+          </div>
+          <span class="preview-label">Оригинал</span>
+          <img class="preview-img" id="pv0" alt="Петергоф">
+        </div>
+      </div>
+    </div>
+
+    <div class="puzzle-wrapper" id="pw1">
+      <div class="puzzle-layout">
+        <div>
+          <span class="puzzle-canvas-label">Перетаскивайте фрагменты на место</span>
+          <div class="canvas-outer" id="co1">
+            <canvas class="puzzle-cv" id="pc1"></canvas>
+            <div class="win-overlay" id="win1">
+              <div class="win-title">Пазл собран!</div>
+              <div class="win-sub">Третьяковская галерея — главный музей<br>национального искусства России.</div>
+              <button class="btn-gold" onclick="resetPuzzle(1)">Собрать заново</button>
+            </div>
+          </div>
+          <div class="progress-wrap"><div class="progress-bar-bg"><div class="progress-bar-fill" id="prg1"></div></div><div class="progress-label" id="prl1">0%</div></div>
+        </div>
+        <div class="puzzle-info-box glass-card">
+          <div class="puzzle-landmark-name">Третьяковская<br><em>галерея</em></div>
+          <p class="puzzle-landmark-desc">Один из крупнейших художественных музеев мира, хранящий бесценные сокровища русского искусства от древних икон до шедевров современности. Основан купцом Павлом Третьяковым в 1856 году.</p>
+          <div class="puzzle-meta"><span class="puzzle-meta-item">📍 Москва</span><span class="puzzle-meta-item">📅 1856</span><span class="puzzle-meta-item">🎨 190 тыс. эксп.</span></div>
+          <div class="puzzle-controls">
+            <select class="difficulty-select" id="df1" onchange="changeDiff(1)"><option value="3">3×3 — Легко</option><option value="4" selected>4×4 — Средне</option><option value="5">5×5 — Сложно</option></select>
+            <button class="btn-gold" onclick="resetPuzzle(1)">↺ Перемешать</button>
+            <button class="btn-solid" onclick="showHint(1)">👁 Подсказка</button>
+          </div>
+          <span class="preview-label">Оригинал</span>
+          <img class="preview-img" id="pv1" alt="Третьяковская галерея">
+        </div>
+      </div>
+    </div>
+
+    <div class="puzzle-wrapper" id="pw2">
+      <div class="puzzle-layout">
+        <div>
+          <span class="puzzle-canvas-label">Перетаскивайте фрагменты на место</span>
+          <div class="canvas-outer" id="co2">
+            <canvas class="puzzle-cv" id="pc2"></canvas>
+            <div class="win-overlay" id="win2">
+              <div class="win-title">Пазл собран!</div>
+              <div class="win-sub">Государственный Эрмитаж —<br>сокровищница мирового искусства.</div>
+              <button class="btn-gold" onclick="resetPuzzle(2)">Собрать заново</button>
+            </div>
+          </div>
+          <div class="progress-wrap"><div class="progress-bar-bg"><div class="progress-bar-fill" id="prg2"></div></div><div class="progress-label" id="prl2">0%</div></div>
+        </div>
+        <div class="puzzle-info-box glass-card">
+          <div class="puzzle-landmark-name">Государственный<br><em>Эрмитаж</em></div>
+          <p class="puzzle-landmark-desc">Расположенный в Зимнем дворце, Эрмитаж является одним из старейших и крупнейших музеев мира. Коллекция музея насчитывает более трех миллионов произведений искусства и памятников мировой культуры.</p>
+          <div class="puzzle-meta"><span class="puzzle-meta-item">📍 Санкт-Петербург</span><span class="puzzle-meta-item">📅 1764</span><span class="puzzle-meta-item">🏛️ 3 млн эксп.</span></div>
+          <div class="puzzle-controls">
+            <select class="difficulty-select" id="df2" onchange="changeDiff(2)"><option value="3">3×3 — Легко</option><option value="4" selected>4×4 — Средне</option><option value="5">5×5 — Сложно</option></select>
+            <button class="btn-gold" onclick="resetPuzzle(2)">↺ Перемешать</button> <button class="btn-solid" onclick="showHint(2)">👁 Подсказка</button>
+          </div>
+          <span class="preview-label">Оригинал</span>
+          <img class="preview-img" id="pv2" alt="Эрмитаж">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider">✦</div>
+<footer>
+  <p>Интерактивная галерея шедевров архитектуры и искусства России</p>
+</footer>
+
+<script>
+/* ── Background Logic ── */
+const bgCvs=document.getElementById('bgCanvas'),bgCtx=bgCvs.getContext('2d');let W,H,tick=0;
+function resize(){W=bgCvs.width=window.innerWidth;H=bgCvs.height=window.innerHeight;}resize();window.addEventListener('resize',resize);
+function blob(x,y,r,R,G,B,a){const g=bgCtx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${R},${G},${B},${a})`);g.addColorStop(1,`rgba(${R},${G},${B},0)`);bgCtx.fillStyle=g;bgCtx.beginPath();bgCtx.arc(x,y,r,0,Math.PI*2);bgCtx.fill();}
+class Sparkle{constructor(){this.reset(true);}reset(rand){this.x=Math.random()*(W||800);this.y=rand?Math.random()*(H||600):(H||600)+10;this.vy=-(Math.random()*.28+.06);this.vx=(Math.random()-.5)*.18;this.r=Math.random()*1.3+.3;this.life=0;this.maxLife=Math.random()*900+500;this.maxA=Math.random()*.4+.08;this.gold=Math.random()>.38;}step(){this.x+=this.vx;this.y+=this.vy;this.life++;const t=this.life/this.maxLife;this.alpha=t<.2?(t/.2)*this.maxA:t>.8?((1-t)/.2)*this.maxA:this.maxA;if(this.life>=this.maxLife||this.y<-10)this.reset(false);bgCtx.save();bgCtx.globalAlpha=this.alpha;bgCtx.beginPath();bgCtx.arc(this.x,this.y,this.r,0,Math.PI*2);bgCtx.fillStyle=this.gold?'#C9920A':'rgba(200,225,248,0.95)';bgCtx.fill();bgCtx.restore();}}
+const sparkles=Array.from({length:170},()=>new Sparkle());
+(function loop(){tick++;const s=Math.sin(tick*.0007),c=Math.cos(tick*.0005),s2=Math.sin(tick*.0011),c2=Math.cos(tick*.0009);bgCtx.clearRect(0,0,W,H);bgCtx.fillStyle='#C4D9EE';bgCtx.fillRect(0,0,W,H);blob(W*(.14+s*.11),H*(.22+c*.1),W*.42,0,53,128,.18);blob(W*(.08+c*.07),H*(.76+s*.09),W*.30,204,0,0,.13);blob(W*(.5+s2*.05),H*(.1+c2*.06),W*.36,180,210,235,.30);blob(W*(.80+c*.09),H*(.28+s*.11),W*.42,0,30,90,.16);blob(W*(.84+s2*.08),H*(.80+c2*.07),W*.33,255,255,255,.20);const gw=bgCtx.createRadialGradient(W/2,H*.48,0,W/2,H*.48,W*.52);gw.addColorStop(0,'rgba(240,247,253,0.72)');gw.addColorStop(.55,'rgba(240,247,253,0.24)');gw.addColorStop(1,'rgba(240,247,253,0)');bgCtx.fillStyle=gw;bgCtx.fillRect(0,0,W,H);sparkles.forEach(p=>p.step());requestAnimationFrame(loop);})();
+
+/* ── Nav ── */
+const mainNav=document.getElementById('mainNav');window.addEventListener('scroll',()=>mainNav.classList.toggle('scrolled',scrollY>40));
+function toggleMenu(){document.getElementById('navLinks').classList.toggle('open');}
+function closeMenu(){document.getElementById('navLinks').classList.remove('open');}
+
+/* ══════════════════════════════════════════
+   PUZZLE IMAGES
+══════════════════════════════════════════ */
+const IMGS=["pasl1.jpg", "pasl2.jpg", "pasl3.jpg"];
+
+const states=[null,null,null];
+
+function initPuzzle(idx){
+  const img=new Image();img.src=IMGS[idx];
+  img.onload=()=>{
+    const cv=document.getElementById('pc0'),ctx=cv.getContext('2d'); // Use actual cv ids pc0, pc1, pc2
+    const targetCv=document.getElementById(`pc${idx}`);
+    const pvImg=document.getElementById(`pv${idx}`);
+    pvImg.src=img.src;
+    
+    const rows=parseInt(document.getElementById(`df${idx}`).value);
+    const cols=rows+1;
+    
+    // Scale canvas to wrapper width
+    const container=document.getElementById(`co${idx}`);
+    const cw=container.offsetWidth;
+    const ch=cw*(img.height/img.width);
+    targetCv.width=cw;targetCv.height=ch;
+    
+    const st={img,rows,cols,cW:cw,cH:ch,cpw:cw/cols,cph:ch/rows,pieces:[],dragging:null,dragOffX:0,dragOffY:0,won:false};
+    
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        st.pieces.push({
+          r,c,
+          x:Math.random()*(cw-st.cpw),
+          y:Math.random()*(ch-st.cph),
+          tx:c*st.cpw, ty:r*st.cph,
+          placed:false
+        });
+      }
+    }
+    states[idx]=st;
+    render(idx);
+    setupEvents(idx,targetCv);
+  };
+}
+
+function render(idx){
+  const st=states[idx];if(!st)return;
+  const cv=document.getElementById(`pc${idx}`),ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,st.cW,st.cH);
+  
+  // Ghost hint
+  ctx.globalAlpha=0.08;ctx.drawImage(st.img,0,0,st.cW,st.cH);ctx.globalAlpha=1;
+  
+  st.pieces.forEach(p=>{
+    if(p.placed)ctx.globalAlpha=1; else ctx.globalAlpha=0.95;
+    ctx.drawImage(st.img, p.c*(st.img.width/st.cols), p.r*(st.img.height/st.rows), (st.img.width/st.cols), (st.img.height/st.rows), p.x, p.y, st.cpw, st.cph);
+    if(!p.placed){
+      ctx.strokeStyle='rgba(201,146,10,0.3)';ctx.lineWidth=1;ctx.strokeRect(p.x,p.y,st.cpw,st.cph);
+    }
+  });
+  
+  const placedCount=st.pieces.filter(p=>p.placed).length;
+  const perc=Math.round((placedCount/st.pieces.length)*100);
+  document.getElementById(`prg${idx}`).style.width=perc+'%';
+  document.getElementById(`prl${idx}`).innerText=perc+'%';
+  
+  if(perc===100 && !st.won){
+    st.won=true;document.getElementById(`win${idx}`).classList.add('show');
+  }
+}
+
+function setupEvents(idx,cv){
+  const pos=(e)=>{
+    const b=cv.getBoundingClientRect();
+    const t=e.touches?e.touches[0]:e;
+    return {x: (t.clientX-b.left)*(cv.width/b.width), y: (t.clientY-b.top)*(cv.height/b.height)};
+  };
+  function onDown(e){
+    const st=states[idx];if(!st||st.won)return;
+    const{x,y}=pos(e);let picked=null;
+    for(let i=st.pieces.length-1;i>=0;i--){
+      const p=st.pieces[i];if(p.placed)continue;
+      if(x>=p.x&&x<=p.x+st.cpw&&y>=p.y&&y<=p.y+st.cph){picked=p;break;}
+    }
+    if(!picked)return;
+    st.pieces.splice(st.pieces.indexOf(picked),1);st.pieces.push(picked);
+    st.dragging=picked;st.dragOffX=x-picked.x;st.dragOffY=y-picked.y;render(idx);
+  }
+  function onMove(e){
+    const st=states[idx];if(!st||!st.dragging)return;
+    const{x,y}=pos(e);
+    st.dragging.x=Math.max(0,Math.min(st.cW-st.cpw,x-st.dragOffX));
+    st.dragging.y=Math.max(0,Math.min(st.cH-st.cph,y-st.dragOffY));
+    render(idx);
+  }
+  function onUp(){
+    const st=states[idx];if(!st||!st.dragging)return;
+    const p=st.dragging;
+    if(Math.abs(p.x-p.tx)<20 && Math.abs(p.y-p.ty)<20){p.x=p.tx;p.y=p.ty;p.placed=true;}
+    st.dragging=null;render(idx);
+  }
+  cv.onmousedown=onDown;window.onmousemove=onMove;window.onmouseup=onUp;
+  cv.ontouchstart=onDown;cv.ontouchmove=onMove;cv.ontouchend=onUp;
+}
+
+function switchPuzzle(idx){
+  document.querySelectorAll('.puzzle-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.querySelectorAll('.puzzle-wrapper').forEach((w,i)=>{
+    w.classList.toggle('active',i===idx);
+    if(i===idx) setTimeout(()=>w.classList.add('visible'),10); else w.classList.remove('visible');
+  });
+  if(!states[idx]) initPuzzle(idx);
+}
+function resetPuzzle(idx){
+  document.getElementById(`win${idx}`).classList.remove('show');
+  states[idx]=null;initPuzzle(idx);
+}
+function changeDiff(idx){resetPuzzle(idx);}
+function showHint(idx){
+  const st=states[idx];if(!st)return;
+  const unplaced=st.pieces.filter(p=>!p.placed);
+  if(unplaced.length>0){
+    const p=unplaced[0];p.x=p.tx;p.y=p.ty;p.placed=true;render(idx);
+  }
+}
+
+// Start first
+window.onload=()=>switchPuzzle(0);
+</script>
+</body>
+</html>
