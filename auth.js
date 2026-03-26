@@ -2,6 +2,7 @@
 const SUPABASE_URL = 'https://hvqjqwshxnnogmwygxea.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2cWpxd3NoeG5ub2dtd3lneGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0NTQxODMsImV4cCI6MjA5MDAzMDE4M30.xlp6oIBuCKSyUVIdsRjUlu2cHxKUnVStx3AjF18fBOc';
 
+
 async function sbFetch(path, opts = {}) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
     ...opts,
