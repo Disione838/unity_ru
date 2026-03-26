@@ -20,30 +20,30 @@
   .nmf-by-s{margin-left:4px;flex:1;display:flex;flex-direction:column}.nmf-by .a{flex:2;background:#CF101A}.nmf-by .b{flex:1;background:#009849}
   .nmf-ru .a{flex:1;background:#fff}.nmf-ru .b{flex:1;background:#003580}.nmf-ru .c{flex:1;background:#CC0000}
   .nav-links{display:flex;gap:20px;list-style:none;align-items:center;position:absolute;left:50%;transform:translateX(-50%)}
-  .nav-links a{font-size:13px;font-weight:400;letter-spacing:.13em;text-transform:uppercase;color:var(--text-soft);text-decoration:none;position:relative;transition:color .2s}
-  .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:100%;height:1px;background:var(--gold);transition:right .3s}
+  .nav-links a{font-size:1px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:var(--text-soft);text-decoration:none;position:relative;transition:color .2s}
+  .nav-links a::after{content:'';position:absolute;bottom:-px;left:0;right:100%;height:1px;background:var(--gold);transition:right .s}
   .nav-links a:hover{color:var(--text-main)}.nav-links a:hover::after{right:0}
   .nav-links a.active{color:var(--gold)}.nav-links a.active::after{right:0}
   .nav-date{font-size:18px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
   .nav-user{display:flex;align-items:center;gap:10px}
-  .nav-user-name{font-size:13px;letter-spacing:.08em;color:var(--text-soft);font-family:'Cormorant Garamond',serif;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .nav-user-btn{font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border:1px solid var(--card-border);background:rgba(232,243,252,.55);color:var(--text-soft);border-radius:8px;cursor:pointer;text-decoration:none;font-family:'Cormorant Garamond',serif;font-weight:600;transition:background .2s}
-  .nav-user-btn:hover{background:rgba(232,243,252,.9)}
+  .nav-user-name{font-size:1px;letter-spacing:.08em;color:var(--text-soft);font-family:'Cormorant Garamond',serif;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-user-btn{font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border:1px solid var(--card-border);background:rgba(22,24,252,.55);color:var(--text-soft);border-radius:8px;cursor:pointer;text-decoration:none;font-family:'Cormorant Garamond',serif;font-weight:600;transition:background .2s}
+  .nav-user-btn:hover{background:rgba(22,24,252,.9)}
   .nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
   .nav-burger span{display:block;width:22px;height:1.5px;background:var(--text-main)}
-  @media(max-width:700px){.nav-links,.nav-date{display:none}.nav-links.open{display:flex;flex-direction:column;gap:0;position:fixed;top:64px;left:0;right:0;width:100%;transform:none;background:rgba(232,243,252,.97);z-index:99;border-bottom:1px solid var(--card-border);padding:16px 32px 24px}.nav-links.open li a{font-size:17px;padding:10px 0;display:block}.nav-burger{display:flex}nav{padding:0 20px}}
+  @media(max-width:700px){.nav-links,.nav-date{display:none}.nav-links.open{display:flex;flex-direction:column;gap:0;position:fixed;top:64px;left:0;right:0;width:100%;transform:none;background:rgba(22,24,252,.97);z-index:99;border-bottom:1px solid var(--card-border);padding:16px 2px 24px}.nav-links.open li a{font-size:17px;padding:10px 0;display:block}.nav-burger{display:flex}nav{padding:0 20px}}
   .hero{position:relative;min-height:52vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 24px 70px;z-index:1}
-  .flags-row{display:flex;align-items:center;gap:28px;margin-bottom:36px;opacity:0;animation:fadeUp 1s .3s forwards}
+  .flags-row{display:flex;align-items:center;gap:28px;margin-bottom:6px;opacity:0;animation:fadeUp 1s .s forwards}
   .flag{width:116px;height:70px;border-radius:4px;overflow:hidden;box-shadow:0 6px 28px rgba(0,0,0,.22),0 0 0 1px rgba(255,255,255,.4);flex-shrink:0;display:flex;flex-direction:column}
   .flag-by{position:relative}.flag-by-bar{position:absolute;left:0;top:0;bottom:0;width:18px;background:repeating-linear-gradient(180deg,#CF101A 0 5px,#fff 5px 10px,#CF101A 10px 15px);z-index:1}
   .flag-by-stripes{margin-left:18px;flex:1;display:flex;flex-direction:column}.flag-by .s1{flex:2;background:#CF101A}.flag-by .s2{flex:1;background:#009849}
   .flag-by-img{width:116px;height:70px;border-radius:4px;object-fit:cover;object-position:left center;box-shadow:0 6px 28px rgba(0,0,0,.22),0 0 0 1px rgba(255,255,255,.4);flex-shrink:0}
-  .flag-ru .s1{flex:1;background:#FFFFFF}.flag-ru .s2{flex:1;background:#003580}.flag-ru .s3{flex:1;background:#CC0000}
-  .connector{position:relative;width:52px;height:2px;background:linear-gradient(90deg,#CF101A,var(--gold),#003580)}.connector::after{content:'✦';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--gold);font-size:16px;padding:0 6px;text-shadow:0 0 12px rgba(201,146,10,.7)}
-  .date-badge{font-size:13px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-dim);padding:10px 32px;margin-bottom:32px;background:rgba(255,255,255,.32);backdrop-filter:blur(6px);opacity:0;animation:fadeUp 1s .6s forwards}
-  .hero-title{font-family:'Playfair Display',serif;font-size:clamp(36px,6vw,74px);font-weight:900;line-height:1.06;color:var(--text-main);margin-bottom:20px;opacity:0;animation:fadeUp 1s .9s forwards;text-shadow:0 2px 20px rgba(232,243,252,.55)}
+  .flag-ru .s1{flex:1;background:#FFFFFF}.flag-ru .s2{flex:1;background:#00580}.flag-ru .s{flex:1;background:#CC0000}
+  .connector{position:relative;width:52px;height:2px;background:linear-gradient(90deg,#CF101A,var(--gold),#00580)}.connector::after{content:'✦';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--gold);font-size:16px;padding:0 6px;text-shadow:0 0 12px rgba(201,146,10,.7)}
+  .date-badge{font-size:1px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-dim);padding:10px 2px;margin-bottom:2px;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);opacity:0;animation:fadeUp 1s .6s forwards}
+  .hero-title{font-family:'Playfair Display',serif;font-size:clamp(6px,6vw,74px);font-weight:900;line-height:1.06;color:var(--text-main);margin-bottom:20px;opacity:0;animation:fadeUp 1s .9s forwards;text-shadow:0 2px 20px rgba(22,24,252,.55)}
   .hero-title em{font-style:italic;color:#CC0000;display:block}
-  .hero-sub{font-size:clamp(17px,2vw,22px);font-weight:300;color:var(--text-soft);max-width:520px;line-height:1.85;opacity:0;animation:fadeUp 1s 1.1s forwards}
+  .hero-sub{font-size:clamp(17px,2vw,22px);font-weight:00;color:var(--text-soft);max-width:520px;line-height:1.85;opacity:0;animation:fadeUp 1s 1.1s forwards}
   .divider{position:relative;z-index:1;text-align:center;padding:10px 0;color:var(--gold);font-size:20px;letter-spacing:14px}
   .divider::before,.divider::after{content:'';position:absolute;top:50%;width:calc(50% - 80px);height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim))}.divider::before{left:0}.divider::after{right:0;transform:scaleX(-1)}
   section{position:relative;z-index:1;padding:70px 24px}
@@ -51,40 +51,40 @@
   .section-eyebrow{display:block;font-size:12px;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
   .section-heading{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1.12;color:var(--text-main);margin-bottom:12px}
   .section-heading em{font-style:italic;color:#CC0000}
-  .section-sub{font-size:clamp(16px,1.8vw,20px);font-weight:300;color:var(--text-soft);margin-bottom:52px;max-width:640px;line-height:1.8}
-  .glass-card{background:rgba(232,243,252,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--card-border);border-radius:2px}
-  .puzzle-tabs{display:flex;gap:3px;margin-bottom:48px;flex-wrap:wrap}
-  .puzzle-tab{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;padding:14px 28px;border:1px solid rgba(0,53,128,.25);background:rgba(232,243,252,.45);color:var(--text-soft);cursor:pointer;transition:all .25s;position:relative;backdrop-filter:blur(6px)}
-  .puzzle-tab::after{content:'';position:absolute;bottom:0;left:0;right:100%;height:2px;background:var(--gold);transition:right .3s}
-  .puzzle-tab:hover{background:rgba(232,243,252,.7);color:var(--text-main)}
-  .puzzle-tab.active{background:rgba(232,243,252,.85);color:var(--text-main);border-color:rgba(0,53,128,.4)}.puzzle-tab.active::after{right:0}
+  .section-sub{font-size:clamp(16px,1.8vw,20px);font-weight:00;color:var(--text-soft);margin-bottom:52px;max-width:640px;line-height:1.8}
+  .glass-card{background:rgba(22,24,252,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--card-border);border-radius:2px}
+  .puzzle-tabs{display:flex;gap:px;margin-bottom:48px;flex-wrap:wrap}
+  .puzzle-tab{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;padding:14px 28px;border:1px solid rgba(0,5,128,.25);background:rgba(22,24,252,.45);color:var(--text-soft);cursor:pointer;transition:all .25s;position:relative;backdrop-filter:blur(6px)}
+  .puzzle-tab::after{content:'';position:absolute;bottom:0;left:0;right:100%;height:2px;background:var(--gold);transition:right .s}
+  .puzzle-tab:hover{background:rgba(22,24,252,.7);color:var(--text-main)}
+  .puzzle-tab.active{background:rgba(22,24,252,.85);color:var(--text-main);border-color:rgba(0,5,128,.4)}.puzzle-tab.active::after{right:0}
   .puzzle-wrapper{display:none;opacity:0;transition:opacity .4s}.puzzle-wrapper.active{display:block}.puzzle-wrapper.visible{opacity:1}
-  .puzzle-layout{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start}
+  .puzzle-layout{display:grid;grid-template-columns:1fr 1fr;gap:6px;align-items:start}
   @media(max-width:860px){.puzzle-layout{grid-template-columns:1fr}}
-  .puzzle-canvas-label{font-size:11px;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:block}
+  .puzzle-canvas-label{font-size:11px;letter-spacing:.8em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:block}
   .canvas-outer{position:relative;line-height:0}
-  canvas.puzzle-cv{display:block;width:100%;cursor:grab;border:1px solid var(--card-border);background:rgba(232,243,252,.40);backdrop-filter:blur(8px);box-shadow:0 8px 40px rgba(0,0,0,.12);touch-action:none}
+  canvas.puzzle-cv{display:block;width:100%;cursor:grab;border:1px solid var(--card-border);background:rgba(22,24,252,.40);backdrop-filter:blur(8px);box-shadow:0 8px 40px rgba(0,0,0,.12);touch-action:none}
   canvas.puzzle-cv:active{cursor:grabbing}
-  .win-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(228,239,248,.92);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .5s;z-index:10;text-align:center;padding:24px}
+  .win-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(228,29,248,.92);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .5s;z-index:10;text-align:center;padding:24px}
   .win-overlay.show{opacity:1;pointer-events:all}
   .win-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--text-main);margin-bottom:20px}
-  .win-sub{font-size:17px;font-weight:300;color:var(--text-soft);margin-bottom:24px;line-height:1.2}
-  .puzzle-info-box{padding:32px 28px 28px}
-  .puzzle-landmark-name{font-family:'Playfair Display',serif;font-size:clamp(22px,2.8vw,32px);font-weight:700;color:var(--text-main);margin-bottom:10px;line-height:1.2}
+  .win-sub{font-size:17px;font-weight:00;color:var(--text-soft);margin-bottom:24px;line-height:1.2}
+  .puzzle-info-box{padding:2px 28px 28px}
+  .puzzle-landmark-name{font-family:'Playfair Display',serif;font-size:clamp(22px,2.8vw,2px);font-weight:700;color:var(--text-main);margin-bottom:10px;line-height:1.2}
   .puzzle-landmark-name em{font-style:italic;color:#CC0000}
-  .puzzle-landmark-desc{font-size:clamp(15px,1.6vw,18px);font-weight:300;color:var(--text-soft);line-height:1.85;margin-bottom:24px}
+  .puzzle-landmark-desc{font-size:clamp(15px,1.6vw,18px);font-weight:00;color:var(--text-soft);line-height:1.85;margin-bottom:24px}
   .puzzle-meta{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:24px}
   .puzzle-meta-item{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
   .puzzle-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
   .btn-gold{font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:12px 28px;border:1px solid var(--gold-dim);background:rgba(201,146,10,.1);color:var(--gold);cursor:pointer;transition:all .25s}.btn-gold:hover{background:rgba(201,146,10,.22);border-color:var(--gold)}
   .btn-solid{font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:12px 28px;border:1px solid var(--gold);background:var(--gold);color:#fff;cursor:pointer;transition:all .25s}.btn-solid:hover{background:#b07e06}
-  .difficulty-select{font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:.06em;padding:11px 32px 11px 14px;border:1px solid rgba(0,53,128,.25);background:rgba(232,243,252,.55);color:var(--text-main);cursor:pointer;outline:none;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9920A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-color:rgba(232,243,252,.55)}
+  .difficulty-select{font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:.06em;padding:11px 2px 11px 14px;border:1px solid rgba(0,5,128,.25);background:rgba(22,24,252,.55);color:var(--text-main);cursor:pointer;outline:none;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%Csvg xmlns='http://www.w.org/2000/svg' width='12' height='8'%E%Cpath d='M1 1l5 5 5-5' stroke='%2C9920A' stroke-width='1.5' fill='none'/%E%C/svg%E");background-repeat:no-repeat;background-position:right 10px center;background-color:rgba(22,24,252,.55)}
   .progress-wrap{margin-top:14px;display:flex;align-items:center;gap:14px}
-  .progress-bar-bg{flex:1;height:3px;background:rgba(0,53,128,.18);border-radius:2px}
+  .progress-bar-bg{flex:1;height:px;background:rgba(0,5,128,.18);border-radius:2px}
   .progress-bar-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .4s;width:0%}
   .progress-label{font-size:12px;letter-spacing:.24em;color:var(--gold);min-width:42px;text-align:right}
-  .preview-label{font-size:11px;letter-spacing:.38em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;display:block}
-  .preview-img{max-width:160px;height:auto;border:1px solid var(--card-border);opacity:.5;transition:opacity .3s;display:block}.preview-img:hover{opacity:.9}
+  .preview-label{font-size:11px;letter-spacing:.8em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;display:block}
+  .preview-img{max-width:160px;height:auto;border:1px solid var(--card-border);opacity:.5;transition:opacity .s;display:block}.preview-img:hover{opacity:.9}
   footer{position:relative;z-index:1;padding:44px 24px;text-align:center;border-top:1px solid rgba(0,53,128,.18);background:rgba(232,243,252,.40);backdrop-filter:blur(10px)}
   footer p{font-size:15px;color:var(--text-muted);letter-spacing:.06em;line-height:2.2}
   @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
@@ -161,7 +161,7 @@
           <p class="puzzle-landmark-desc">Знаменитый дворцово-парковый ансамбль на южном берегу Финского залива. Петергоф славится своими уникальными фонтанами, регулярными парками и роскошными дворцами, являясь жемчужиной мирового барокко.</p>
           <div class="puzzle-meta"><span class="puzzle-meta-item">📍 Санкт-Петербург</span><span class="puzzle-meta-item">📅 1710</span><span class="puzzle-meta-item">⛲ 147 фонтанов</span></div>
           <div class="puzzle-controls">
-            <select class="difficulty-select" id="df0" onchange="changeDiff(0)"><option value="3">3×3 — Легко</option><option value="4" selected>4×4 — Средне</option><option value="5">5×5 — Сложно</option></select>
+            <select class="difficulty-select" id="df0" onchange="changeDiff(0)"><option value="3">4×3 — Легко</option><option value="4" selected>5×4 — Средне</option><option value="5">6×5 — Сложно</option></select>
             <button class="btn-gold" onclick="resetPuzzle(0)">↺ Перемешать</button>
             <button class="btn-solid" onclick="showHint(0)">👁 Подсказка</button>
           </div>
