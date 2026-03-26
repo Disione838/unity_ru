@@ -476,7 +476,6 @@ async function showResults(timedOut = false){
         <div id="lbContent" style="color:var(--text-muted);font-size:16px">Загружаем…</div>
       </div>
       <div class="res-btns">
-        <button class="btn-primary" onclick="restart()">↺ Пройти ещё раз</button>
         <a href="index.html" class="btn-outline">← На главную</a>
       </div>
       <p class="res-sub">Делитесь знаниями о России!</p>
@@ -563,7 +562,62 @@ async function loadLeaderboard() {
   window.doLogout = doLogout;
 })();
 
-render();
+// ── Проверяем, проходил ли пользователь тест ──
+async function checkAlreadyPlayed() {
+  const user = getUser();
+  if (!user) { render(); return; }
+  try {
+    // Ищем любой результат текущего пользователя
+    const r = await sbFetch(`quiz_results?select=score,total,time_ms,completed_at&user_id=eq.${user.id}&order=completed_at.asc&limit=1`);
+    if (r.data && r.data.length > 0) {
+      // Уже проходил — показываем экран "уже сыграно"
+      showAlreadyPlayed(r.data[0]);
+    } else {
+      render();
+    }
+  } catch(e) {
+    render();
+  }
+}
+
+function showAlreadyPlayed(result) {
+  document.getElementById('quizPage').classList.remove('active');
+  const rp = document.getElementById('resultsPage');
+  rp.classList.add('active');
+  window.scrollTo(0,0);
+  const pct = Math.round(result.score / result.total * 100);
+  const mins = Math.floor(result.time_ms / 60000);
+  const secs = Math.floor((result.time_ms % 60000) / 1000);
+  const timeStr = `${mins}:${String(secs).padStart(2,'0')}`;
+  const C = 2 * Math.PI * 80;
+  const wrap = document.getElementById('resultsWrap');
+  wrap.innerHTML = `
+    <div style="opacity:0;animation:fadeUp .8s .1s forwards;width:100%;max-width:800px;margin:0 auto">
+      <span class="res-emoji">🔒</span>
+      <h2 class="res-title">Вы уже<br><em>участвовали!</em></h2>
+      <p class="res-verdict" style="margin-top:16px">Викторина рассчитана на однократное прохождение.<br>Ваш результат уже сохранён в таблице лидеров.</p>
+      <div class="ring-wrap">
+        <svg viewBox="0 0 180 180"><circle class="ring-bg" cx="90" cy="90" r="80"/><circle class="ring-fg" id="rfg" cx="90" cy="90" r="80" style="stroke-dasharray:${C};stroke-dashoffset:${C}"/></svg>
+        <div class="ring-inner"><div class="ring-n">${result.score}</div><div class="ring-of">из ${result.total}</div></div>
+      </div>
+      <p style="font-size:15px;letter-spacing:.2em;color:var(--text-muted);margin-bottom:32px">⏱ Ваше время: ${timeStr} &nbsp;·&nbsp; ${pct}%</p>
+      <div id="lbArea" class="lb-section">
+        <div class="lb-title">🏅 Таблица лидеров</div>
+        <div id="lbContent" style="color:var(--text-muted);font-size:16px">Загружаем…</div>
+      </div>
+      <div class="res-btns">
+        <a href="index.html" class="btn-outline">← На главную</a>
+      </div>
+      <p class="res-sub">Делитесь знаниями о России!</p>
+    </div>`;
+  setTimeout(() => {
+    const r = document.getElementById('rfg');
+    if (r) r.style.strokeDashoffset = C * (1 - result.score / result.total);
+  }, 300);
+  loadLeaderboard();
+}
+
+checkAlreadyPlayed();
 </script>
 </body>
 </html>
