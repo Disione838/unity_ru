@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Таблица лидеров · День единения</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent:     #1a3f8f;
+    --accent-dim: rgba(26,63,143,0.42);
+    --accent-h:   #0d2660;
+    --white:      #F7F9FF;
+    --text-main:  #0A0C1C;
+    --text-soft:  rgba(10,12,28,0.72);
+    --text-muted: rgba(10,12,28,0.48);
+    --card-border:rgba(26,63,143,0.26);
+    --correct:    #1a7a3c;
+    --num: 'DM Mono', monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:#dde3f0;color:var(--text-main);font-family:'Times New Roman',serif;overflow-x:hidden;min-height:100vh}
+  #bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+  /* ── NAV ── */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 44px;height:64px;background:rgba(247,249,255,.72);backdrop-filter:blur(18px);border-bottom:1px solid rgba(26,63,143,.18);transition:background .3s,box-shadow .3s}
+  nav.scrolled{background:rgba(247,249,255,.96);box-shadow:0 2px 18px rgba(0,0,0,.08)}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text-main);display:flex;align-items:center;gap:10px;text-decoration:none}
+  .nmf{width:22px;height:14px;border-radius:1px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.2);flex-shrink:0}
+  .nmf-ru .a{flex:1;background:#fff}.nmf-ru .b{flex:1;background:#003580}.nmf-ru .c{flex:1;background:#CC0000}
+  .nmf-by{position:relative}
+  .nmf-by-bar{position:absolute;left:0;top:0;bottom:0;width:4px;background:repeating-linear-gradient(180deg,#CF101A 0 2px,#fff 2px 4px,#CF101A 4px 6px);z-index:1}
+  .nmf-by-s{margin-left:4px;flex:1;display:flex;flex-direction:column}
+  .nmf-by .a{flex:2;background:#CF101A}.nmf-by .b{flex:1;background:#009849}
+  .nav-right{display:flex;align-items:center;gap:20px}
+  .nav-home-link{font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-soft);text-decoration:none;position:relative;transition:color .2s;font-family:'Cormorant Garamond',serif}
+  .nav-home-link::after{content:'';position:absolute;bottom:-2px;left:0;right:100%;height:1px;background:var(--accent);transition:right .3s}
+  .nav-home-link:hover{color:var(--text-main)}.nav-home-link:hover::after{right:0}
+  .nav-date{font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600;font-family:'Times New Roman',serif}
+  .nav-user{display:flex;align-items:center;gap:10px}
+  .nav-user-name{font-size:13px;letter-spacing:.08em;color:var(--text-soft);font-family:'Cormorant Garamond',serif;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-user-btn{font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border:1px solid var(--card-border);background:rgba(255,255,255,.45);color:var(--text-soft);border-radius:8px;cursor:pointer;text-decoration:none;font-family:'Cormorant Garamond',serif;font-weight:600;transition:background .2s}
+  .nav-user-btn:hover{background:rgba(255,255,255,.85)}
+
+  /* ── LAYOUT ── */
+  .page-wrap{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
+  .content-wrap{flex:1;padding:110px 24px 90px;max-width:860px;margin:0 auto;width:100%}
+
+  /* ── HEADER ── */
+  .lb-header{text-align:center;margin-bottom:56px;opacity:0;animation:fadeUp .7s .1s forwards}
+  .lb-eyebrow{font-size:12px;letter-spacing:.48em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:block}
+  .lb-title-main{font-family:'Playfair Display',serif;font-size:clamp(38px,6vw,68px);font-weight:900;line-height:1.06;color:var(--text-main);margin-bottom:14px}
+  .lb-title-main em{font-style:italic;color:#0a2a7a}
+  .lb-subtitle{font-size:clamp(16px,2vw,20px);font-weight:300;color:var(--text-soft);font-family:'Cormorant Garamond',serif;line-height:1.7}
+
+  /* ── FILTERS ── */
+  .lb-filters{display:flex;gap:10px;justify-content:center;margin-bottom:36px;flex-wrap:wrap;opacity:0;animation:fadeUp .6s .25s forwards}
+  .filter-btn{font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:.18em;text-transform:uppercase;padding:9px 22px;border:1.5px solid var(--card-border);background:rgba(255,255,255,.45);color:var(--text-soft);border-radius:10px;cursor:pointer;transition:background .18s,border-color .18s,color .18s}
+  .filter-btn:hover{background:rgba(255,255,255,.8);border-color:var(--accent)}
+  .filter-btn.active{background:var(--accent);color:#F7F9FF;border-color:var(--accent)}
+
+  /* ── LEADERBOARD CARD ── */
+  .lb-card{background:rgba(255,255,255,.62);backdrop-filter:blur(16px);border:1px solid var(--card-border);border-radius:12px;overflow:hidden;opacity:0;animation:fadeUp .6s .35s forwards;position:relative}
+  .lb-card::before{content:'';position:absolute;inset:10px;border:1px solid rgba(26,63,143,.07);pointer-events:none;border-radius:4px}
+  .qc{position:absolute;width:20px;height:20px;border-color:var(--accent-dim);border-style:solid}
+  .qc.tl{top:12px;left:12px;border-width:1.5px 0 0 1.5px}
+  .qc.tr{top:12px;right:12px;border-width:1.5px 1.5px 0 0}
+  .qc.bl{bottom:12px;left:12px;border-width:0 0 1.5px 1.5px}
+  .qc.br{bottom:12px;right:12px;border-width:0 1.5px 1.5px 0}
+
+  /* ── TOP-3 PODIUM ── */
+  .podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;padding:32px 28px 0;border-bottom:1px solid rgba(26,63,143,.1);margin-bottom:0}
+  .podium-item{display:flex;flex-direction:column;align-items:center;padding:20px 12px;position:relative}
+  .podium-item.rank-1{order:2}
+  .podium-item.rank-2{order:1;padding-top:36px}
+  .podium-item.rank-3{order:3;padding-top:36px}
+  .podium-medal{font-size:36px;margin-bottom:10px;display:block;filter:drop-shadow(0 3px 8px rgba(0,0,0,.15))}
+  .podium-item.rank-1 .podium-medal{font-size:48px;animation:floatIcon 3s ease-in-out infinite}
+  .podium-avatar{width:54px;height:54px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:10px;box-shadow:0 4px 16px rgba(26,63,143,.3);flex-shrink:0}
+  .podium-item.rank-1 .podium-avatar{width:66px;height:66px;font-size:26px;box-shadow:0 6px 24px rgba(26,63,143,.45)}
+  .podium-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--text-main);text-align:center;margin-bottom:4px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .podium-score{font-family:var(--num);font-size:13px;color:var(--accent);letter-spacing:.02em}
+  .podium-pct{font-size:11px;color:var(--text-muted);margin-top:2px}
+  .podium-bar{position:absolute;bottom:0;left:12px;right:12px;border-radius:4px 4px 0 0}
+  .podium-item.rank-1 .podium-bar{height:80px;background:linear-gradient(180deg,rgba(26,63,143,.14) 0%,rgba(26,63,143,.06) 100%)}
+  .podium-item.rank-2 .podium-bar{height:56px;background:linear-gradient(180deg,rgba(26,63,143,.09) 0%,rgba(26,63,143,.03) 100%)}
+  .podium-item.rank-3 .podium-bar{height:40px;background:linear-gradient(180deg,rgba(26,63,143,.07) 0%,rgba(26,63,143,.02) 100%)}
+
+  /* ── TABLE ── */
+  .lb-table-wrap{padding:8px 0 24px}
+  .lb-table{width:100%;border-collapse:collapse}
+  .lb-table th{font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--accent);padding:12px 20px;text-align:left;border-bottom:1px solid var(--card-border)}
+  .lb-table td{padding:13px 20px;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--text-soft);border-bottom:1px solid rgba(26,63,143,.06);transition:background .15s}
+  .lb-table tr:hover td{background:rgba(255,255,255,.45)}
+  .lb-table tr:last-child td{border-bottom:none}
+  .lb-rank{font-family:'DM Mono',monospace!important;font-size:13px!important;color:var(--accent)!important;width:40px}
+  .lb-name{font-weight:600!important;color:var(--text-main)!important}
+  .lb-score-cell{font-family:'DM Mono',monospace!important;font-size:15px!important}
+  .lb-pct-cell{font-family:'DM Mono',monospace!important;font-size:15px!important}
+  .lb-time-cell{font-family:'DM Mono',monospace!important;font-size:14px!important;color:var(--text-muted)!important}
+  .lb-bar-cell{width:100px}
+  .lb-mini-bar{height:3px;background:rgba(26,63,143,.12);border-radius:2px;overflow:hidden;width:80px}
+  .lb-mini-fill{height:100%;background:var(--accent);border-radius:2px}
+  .lb-you{background:rgba(26,63,143,.05)!important}
+  .lb-you td{color:var(--accent)!important;font-weight:600!important}
+  .lb-you .lb-rank::after{content:' ←';font-size:10px;opacity:.6}
+
+  /* ── EMPTY / LOADING ── */
+  .lb-empty{text-align:center;padding:60px 24px}
+  .lb-empty-icon{font-size:56px;margin-bottom:16px;display:block;opacity:.5}
+  .lb-empty-text{font-family:'Playfair Display',serif;font-size:22px;color:var(--text-muted);margin-bottom:8px}
+  .lb-empty-sub{font-size:16px;color:var(--text-muted);font-family:'Cormorant Garamond',serif}
+  .lb-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:48px 24px;color:var(--text-muted);font-family:'Cormorant Garamond',serif;font-size:18px}
+  .spinner{width:20px;height:20px;border:2px solid rgba(26,63,143,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ── CTA ── */
+  .lb-cta{text-align:center;margin-top:40px;opacity:0;animation:fadeUp .6s .5s forwards}
+  .lb-cta p{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--text-soft);margin-bottom:20px}
+  .btn-primary{display:inline-flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#F7F9FF;background:var(--accent);padding:15px 40px;border:none;cursor:pointer;letter-spacing:.07em;border-radius:10px;box-shadow:0 6px 22px rgba(26,63,143,.28);transition:background .2s,transform .2s,box-shadow .2s;text-decoration:none}
+  .btn-primary:hover{background:var(--accent-h);transform:translateY(-2px);box-shadow:0 10px 30px rgba(26,63,143,.42)}
+  .btn-outline{display:inline-flex;align-items:center;gap:8px;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--text-soft);background:rgba(255,255,255,.55);border:1.5px solid var(--accent-dim);padding:14px 32px;cursor:pointer;border-radius:10px;transition:background .18s,border-color .18s;text-decoration:none}
+  .btn-outline:hover{background:rgba(255,255,255,.9);border-color:var(--accent)}
+
+  /* ── FOOTER ── */
+  footer{position:relative;z-index:1;padding:36px 24px;text-align:center;border-top:1px solid rgba(26,63,143,.16);background:rgba(255,255,255,.3);backdrop-filter:blur(10px)}
+  footer p{font-size:14px;color:var(--text-muted);letter-spacing:.05em;line-height:2.1}
+
+  /* ── ANIMS ── */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes floatIcon{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+  @media(max-width:600px){
+    nav{padding:0 18px}
+    .nav-date{display:none}
+    .content-wrap{padding:90px 16px 60px}
+    .podium{padding:20px 10px 0;grid-template-columns:1fr 1fr 1fr;gap:4px}
+    .podium-avatar{width:42px;height:42px;font-size:17px}
+    .podium-item.rank-1 .podium-avatar{width:52px;height:52px;font-size:20px}
+    .podium-name{font-size:12px;max-width:70px}
+    .lb-bar-cell{display:none}
+    .lb-table th,.lb-table td{padding:10px 12px}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="index.html" class="nav-logo">
+    <div style="display:flex;gap:3px;align-items:center">
+      <div class="nmf nmf-ru"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+      <div class="nmf nmf-by">
+        <div class="nmf-by-bar"></div>
+        <div class="nmf-by-s"><div class="a"></div><div class="b"></div></div>
+      </div>
+    </div>
+    День единения
+  </a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-home-link">← Главная</a>
+    <div id="navUserArea" class="nav-user"></div>
+    <div class="nav-date">2 апреля</div>
+  </div>
+</nav>
+
+<!-- CONTENT -->
+<div class="page-wrap">
+  <div class="content-wrap">
+
+    <!-- HEADER -->
+    <div class="lb-header">
+      <span class="lb-eyebrow">Викторина · Россия</span>
+      <h1 class="lb-title-main">Таблица<br><em>лидеров</em></h1>
+      <p class="lb-subtitle">Первые результаты участников викторины о России</p>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="lb-filters">
+      <button class="filter-btn active" onclick="setSort('score')">По результату</button>
+      <button class="filter-btn" onclick="setSort('time')">По времени</button>
+    </div>
+
+    <!-- CARD -->
+    <div class="lb-card" id="lbCard">
+      <div class="qc tl"></div><div class="qc tr"></div>
+      <div class="qc bl"></div><div class="qc br"></div>
+      <div id="lbInner">
+        <div class="lb-loading"><div class="spinner"></div> Загружаем лидеров…</div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="lb-cta" id="ctaArea">
+      <p id="ctaText">Пройдите викторину и войдите в таблицу лидеров!</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a href="quiz.html" class="btn-primary" id="ctaBtn">✦ Пройти викторину</a>
+        <a href="index.html" class="btn-outline">← На главную</a>
+      </div>
+    </div>
+
+  </div>
+  <footer>
+    <p>Викторина · Россия · День единения</p>
+  </footer>
+</div>
+
+<script src="auth.js"></script>
+<script>
+/* ════════ BACKGROUND ════════ */
+const canvas=document.getElementById('bgCanvas'),ctx=canvas.getContext('2d');
+let W,H,tick=0;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+function blob(x,y,r,R,G,B,a){const g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${R},${G},${B},${a})`);g.addColorStop(1,`rgba(${R},${G},${B},0)`);ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();}
+class Sparkle{constructor(){this.reset(true);}reset(rand){this.x=Math.random()*(W||800);this.y=rand?Math.random()*(H||600):(H||600)+10;this.vy=-(Math.random()*.28+.06);this.vx=(Math.random()-.5)*.18;this.r=Math.random()*1.3+.3;this.life=0;this.maxLife=Math.random()*900+500;this.maxA=Math.random()*.4+.08;this.blue=Math.random()>.38;}step(){this.x+=this.vx;this.y+=this.vy;this.life++;const t=this.life/this.maxLife;this.alpha=t<.2?(t/.2)*this.maxA:t>.8?((1-t)/.2)*this.maxA:this.maxA;if(this.life>=this.maxLife||this.y<-10)this.reset(false);ctx.save();ctx.globalAlpha=this.alpha;ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=this.blue?'#1a3f8f':'rgba(200,215,255,.9)';ctx.fill();ctx.restore();}}
+const sparkles=Array.from({length:160},()=>new Sparkle());
+(function loop(){tick++;const s=Math.sin(tick*.0007),c=Math.cos(tick*.0005),s2=Math.sin(tick*.0011),c2=Math.cos(tick*.0009);
+ctx.clearRect(0,0,W,H);ctx.fillStyle='#D8E0F0';ctx.fillRect(0,0,W,H);
+blob(W*(.12+s*.10),H*(.20+c*.10),W*.50,0,53,128,.25);
+blob(W*(.10+c*.07),H*(.78+s*.08),W*.36,204,0,0,.20);
+blob(W*(.50+s2*.05),H*(.08+c2*.06),W*.40,200,210,240,.32);
+blob(W*(.82+c*.08),H*(.30+s*.10),W*.48,0,53,128,.28);
+blob(W*(.85+s2*.07),H*(.82+c2*.06),W*.36,204,0,0,.20);
+const gw=ctx.createRadialGradient(W/2,H*.48,0,W/2,H*.48,W*.52);
+gw.addColorStop(0,'rgba(235,240,255,.80)');gw.addColorStop(.55,'rgba(235,240,255,.30)');gw.addColorStop(1,'rgba(235,240,255,0)');
+ctx.fillStyle=gw;ctx.fillRect(0,0,W,H);sparkles.forEach(p=>p.step());requestAnimationFrame(loop);})();
+
+const nav=document.getElementById('mainNav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>40));
+
+/* ════════ DATA ════════ */
+let allRows = [];
+let currentSort = 'score';
+let currentUserId = null;
+
+/* ════════ SORT ════════ */
+function setSort(type) {
+  currentSort = type;
+  document.querySelectorAll('.filter-btn').forEach((b,i) => {
+    b.classList.toggle('active', (i===0 && type==='score') || (i===1 && type==='time'));
+  });
+  renderTable(allRows);
+}
+
+function sortRows(rows) {
+  const r = [...rows];
+  if (currentSort === 'time') {
+    r.sort((a,b) => a.time_ms - b.time_ms);
+  } else {
+    r.sort((a,b) => b.score !== a.score ? b.score - a.score : a.time_ms - b.time_ms);
+  }
+  return r;
+}
+
+/* ════════ RENDER ════════ */
+function renderTable(rows) {
+  const sorted = sortRows(rows);
+  const inner = document.getElementById('lbInner');
+  if (!sorted || sorted.length === 0) {
+    inner.innerHTML = `<div class="lb-empty">
+      <span class="lb-empty-icon">🏅</span>
+      <div class="lb-empty-text">Пока нет результатов</div>
+      <div class="lb-empty-sub">Станьте первым участником викторины!</div>
+    </div>`;
+    return;
+  }
+
+  // Top-3 podium (только при сортировке по результату)
+  let podiumHTML = '';
+  if (currentSort === 'score' && sorted.length >= 2) {
+    const top = sorted.slice(0, Math.min(3, sorted.length));
+    // Порядок: 2-й, 1-й, 3-й (визуальный пьедестал)
+    const order = top.length === 1 ? [top[0]] : top.length === 2 ? [top[1], top[0]] : [top[1], top[0], top[2]];
+    const ranks = top.length === 1 ? [1] : top.length === 2 ? [2, 1] : [2, 1, 3];
+    const medals = ['🥇','🥈','🥉'];
+    podiumHTML = `<div class="podium">
+      ${order.map((row, i) => {
+        const rank = ranks[i];
+        const letter = (row.username || 'А')[0].toUpperCase();
+        const pct = Math.round(row.score / row.total * 100);
+        const isYou = currentUserId && row.user_id === currentUserId;
+        return `<div class="podium-item rank-${rank}${isYou?' lb-you':''}">
+          <span class="podium-medal">${medals[rank-1]}</span>
+          <div class="podium-avatar" style="${rank===1?'background:linear-gradient(135deg,#1a3f8f,#4169c8)':''}">${letter}</div>
+          <div class="podium-name">${row.username || 'Аноним'}${isYou?' (вы)':''}</div>
+          <div class="podium-score">${row.score}/${row.total}</div>
+          <div class="podium-pct">${pct}%</div>
+          <div class="podium-bar"></div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  // Full table (с 4-го места, или все при сортировке по времени)
+  const tableRows = currentSort === 'score' ? sorted.slice(3) : sorted;
+  const startRank = currentSort === 'score' ? 4 : 1;
+
+  let tableHTML = '';
+  if (tableRows.length > 0 || currentSort === 'time') {
+    const displayRows = currentSort === 'time' ? sorted : tableRows;
+    const startIdx = currentSort === 'time' ? 0 : 3;
+    tableHTML = `<div class="lb-table-wrap">
+      <table class="lb-table">
+        <thead><tr>
+          <th class="lb-rank">#</th>
+          <th>Участник</th>
+          <th>Правильных</th>
+          <th>Результат</th>
+          <th>Время</th>
+          <th class="lb-bar-cell"></th>
+        </tr></thead>
+        <tbody>
+          ${displayRows.map((row, i) => {
+            const rank = i + (currentSort === 'time' ? 1 : 4);
+            const pct = Math.round(row.score / row.total * 100);
+            const mins = Math.floor(row.time_ms / 60000);
+            const secs = Math.floor((row.time_ms % 60000) / 1000);
+            const time = `${mins}:${String(secs).padStart(2,'0')}`;
+            const isYou = currentUserId && row.user_id === currentUserId;
+            return `<tr${isYou?' class="lb-you"':''}>
+              <td class="lb-rank">${rank}</td>
+              <td class="lb-name">${row.username || 'Аноним'}${isYou?' <span style="font-size:11px;opacity:.6">(вы)</span>':''}</td>
+              <td class="lb-score-cell">${row.score}/${row.total}</td>
+              <td class="lb-pct-cell">${pct}%</td>
+              <td class="lb-time-cell">${time}</td>
+              <td class="lb-bar-cell"><div class="lb-mini-bar"><div class="lb-mini-fill" style="width:${pct}%"></div></div></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  }
+
+  inner.innerHTML = podiumHTML + tableHTML;
+}
+
+/* ════════ LOAD ════════ */
+async function loadLeaderboard() {
+  try {
+    const r = await sbFetch('quiz_leaderboard?select=username,score,total,time_ms&order=score.desc,time_ms.asc&limit=20');
+    allRows = r.data || [];
+    renderTable(allRows);
+  } catch(e) {
+    document.getElementById('lbInner').innerHTML = `<div class="lb-empty">
+      <span class="lb-empty-icon">⚠️</span>
+      <div class="lb-empty-text">Не удалось загрузить</div>
+      <div class="lb-empty-sub">Проверьте соединение и обновите страницу</div>
+    </div>`;
+  }
+}
+
+/* ════════ INIT USER NAV + CTA ════════ */
+(function(){
+  const u = getUser();
+  const area = document.getElementById('navUserArea');
+  if (u) {
+    currentUserId = u.id;
+    const name = (u.user_metadata && u.user_metadata.username) || u.email.split('@')[0];
+    area.innerHTML = `<span class="nav-user-name">👤 ${name}</span><button class="nav-user-btn" onclick="doLogout()">Выйти</button>`;
+    // Проверяем, уже проходил ли
+    sbFetch(`quiz_results?select=score,total&user_id=eq.${u.id}&limit=1`).then(r => {
+      const ctaText = document.getElementById('ctaText');
+      const ctaBtn  = document.getElementById('ctaBtn');
+      if (r.data && r.data.length > 0) {
+        const res = r.data[0];
+        const pct = Math.round(res.score / res.total * 100);
+        if (ctaText) ctaText.innerHTML = `Вы уже участвовали — ваш результат <strong>${res.score}/${res.total}</strong> (${pct}%)`;
+        if (ctaBtn)  { ctaBtn.textContent = '← Мой результат'; ctaBtn.href = 'quiz.html'; }
+      }
+    }).catch(()=>{});
+  } else {
+    area.innerHTML = `<a href="auth.html" class="nav-user-btn" style="background:var(--accent);color:#fff;border-color:var(--accent)">Войти</a>`;
+  }
+  async function doLogout(){ await signOut(); window.location.href='auth.html'; }
+  window.doLogout = doLogout;
+})();
+
+loadLeaderboard();
+</script>
+</body>
+</html>
