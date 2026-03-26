@@ -25,7 +25,7 @@
   /* NAVBAR */
   nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 44px;height:64px;background:rgba(255,253,247,0.7);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(201,146,10,0.22);transition:background .3s,box-shadow .3s}
   nav.scrolled{background:rgba(255,253,247,0.95);box-shadow:0 2px 20px rgba(0,0,0,0.08)}
-  .nav-logo{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text-main);letter-spacing:.02em;display:flex;align-items:center;gap:10px;text-decoration:none}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text-main);letter-spacing:.02em;display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
   .nav-logo-flags{display:flex;gap:3px;align-items:center}
   .nmf{width:22px;height:14px;border-radius:1px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 4px rgba(0,0,0,.2);flex-shrink:0}
   .nmf-by{position:relative}
@@ -37,11 +37,16 @@
   .nav-links a{font-size:13px;font-weight:400;letter-spacing:.13em;text-transform:uppercase;color:var(--text-soft);text-decoration:none;position:relative;transition:color .2s}
   .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:100%;height:1px;background:var(--gold);transition:right .3s}
   .nav-links a:hover{color:var(--text-main)}.nav-links a:hover::after{right:0}
-  .nav-date{font-size:16px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600; font-family: 'Times New Roman', Times, serif;}
+  .nav-date{display:none}
+  .nav-right-area{display:flex;align-items:center;gap:10px;flex-shrink:0}
   .nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
   .nav-burger span{display:block;width:22px;height:1.5px;background:var(--text-main)}
+  @media(max-width:900px){
+    .nav-links{gap:12px}
+    .nav-links a{font-size:11px;letter-spacing:.08em}
+  }
   @media(max-width:700px){
-    .nav-links,.nav-date{display:none}
+    .nav-links{display:none}
     .nav-links.open{display:flex;flex-direction:column;gap:0;position:fixed;top:64px;left:0;right:0;width:100%;transform:none;background:rgba(255,253,247,.97);border-bottom:1px solid var(--card-border);padding:16px 32px 24px;z-index:99}
     .nav-links.open li a{font-size:17px;padding:10px 0;display:block}
     .nav-burger{display:flex}
@@ -129,12 +134,11 @@
 
   .nav-quiz-pill{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#FFFDF7;background:#1a3f8f;border-radius:8px;padding:8px 18px;text-decoration:none;letter-spacing:.05em;transition:background .2s,transform .2s,box-shadow .2s;box-shadow:0 3px 12px rgba(122,40,0,.25)}
   /* AUTH UI */
-  .nav-user{display:flex;align-items:center;gap:10px}
-  .nav-user-name{font-size:13px;letter-spacing:.08em;color:var(--text-soft);font-family:'Cormorant Garamond',serif;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .nav-user-btn{font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:7px 16px;border:1px solid var(--card-border);background:rgba(255,255,255,.45);color:var(--text-soft);border-radius:8px;cursor:pointer;text-decoration:none;font-family:'Cormorant Garamond',serif;font-weight:600;transition:background .2s,border-color .2s}
+  .nav-user-name{font-size:13px;letter-spacing:.06em;color:var(--text-soft);font-family:'Cormorant Garamond',serif;font-weight:600;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-user-btn{font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border:1px solid var(--card-border);background:rgba(255,255,255,.45);color:var(--text-soft);border-radius:8px;cursor:pointer;text-decoration:none;font-family:'Cormorant Garamond',serif;font-weight:600;transition:background .2s,border-color .2s;white-space:nowrap}
   .nav-user-btn:hover{background:rgba(255,255,255,.85);border-color:var(--gold)}
   .nav-user-btn.primary{background:var(--gold);color:#fff;border-color:var(--gold)}
-  .nav-user-btn.primary:hover{background:#0d2660}
+  .nav-user-btn.primary:hover{background:#0d2660;border-color:#0d2660}
   .nav-quiz-pill:hover{background:#0d2660;transform:translateY(-1px);box-shadow:0 6px 20px rgba(122,40,0,.35)}
   @media(max-width:700px){
     .nav-quiz-pill{display:none}  
@@ -178,8 +182,7 @@
     <li><a href="puzzle.html" onclick="closeMenu()">Пазлы</a></li>
     <li><a href="quiz.html" onclick="closeMenu()">Тесты</a></li>
   </ul>
-  <div id="navUserArea" class="nav-user"></div>
-  <div class="nav-date">2 апреля</div>
+  <div id="navUserArea" class="nav-right-area"></div>
   <button class="nav-burger" id="burger" aria-label="Меню" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </button>
@@ -448,6 +451,8 @@ const io = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.12 });
 document.querySelectorAll('.tl-item, .sym-card').forEach(el => io.observe(el));
+</script>
+
 <script src="auth.js"></script>
 <script>
 // Init user nav

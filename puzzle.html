@@ -25,19 +25,10 @@
   .nav-links a:hover{color:var(--text-main)}.nav-links a:hover::after{right:0}
   .nav-links a.active{color:var(--gold)}.nav-links a.active::after{right:0}
   .nav-date{font-size:18px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
-  /* User nav */
   .nav-user{display:flex;align-items:center;gap:10px}
   .nav-user-name{font-size:13px;letter-spacing:.08em;color:var(--text-soft);font-family:'Cormorant Garamond',serif;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .nav-user-btn{font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border:1px solid var(--card-border);background:rgba(232,243,252,.55);color:var(--text-soft);border-radius:8px;cursor:pointer;text-decoration:none;font-family:'Cormorant Garamond',serif;font-weight:600;transition:background .2s}
   .nav-user-btn:hover{background:rgba(232,243,252,.9)}
-  /* Leaderboard */
-  .lb-section{margin-top:60px;padding:36px;background:rgba(232,243,252,.55);backdrop-filter:blur(12px);border:1px solid var(--card-border);border-radius:2px}
-  .lb-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text-main);margin-bottom:18px}
-  .lb-table{width:100%;border-collapse:collapse}
-  .lb-table th{font-size:10px;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);padding:8px 12px;text-align:left;border-bottom:1px solid var(--card-border)}
-  .lb-table td{padding:10px 12px;font-size:16px;font-weight:300;color:var(--text-soft);border-bottom:1px solid rgba(0,53,128,.07)}
-  .lb-table tr:first-child td{color:var(--text-main);font-weight:600}
-  .lb-rank{font-family:'Montserrat',monospace;font-size:13px;color:var(--gold);width:32px}
   .nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
   .nav-burger span{display:block;width:22px;height:1.5px;background:var(--text-main)}
   @media(max-width:700px){.nav-links,.nav-date{display:none}.nav-links.open{display:flex;flex-direction:column;gap:0;position:fixed;top:64px;left:0;right:0;width:100%;transform:none;background:rgba(232,243,252,.97);z-index:99;border-bottom:1px solid var(--card-border);padding:16px 32px 24px}.nav-links.open li a{font-size:17px;padding:10px 0;display:block}.nav-burger{display:flex}nav{padding:0 20px}}
@@ -124,7 +115,6 @@
     <li><a href="puzzle.html" class="active" onclick="closeMenu()">Пазлы</a></li>
     <li><a href="quiz.html" onclick="closeMenu()">Тесты</a></li>
   </ul>
-  <div class="nav-date">Россия</div>
   <div id="navUserArea" class="nav-user"></div>
   <button class="nav-burger" id="burger" aria-label="Меню" onclick="toggleMenu()"><span></span><span></span><span></span></button>
 </nav>
@@ -242,22 +232,10 @@
 </section>
 
 <div class="divider">✦</div>
-
-<section style="padding:50px 24px 70px">
-  <div class="container">
-    <div class="lb-section">
-      <div class="lb-title">🏅 Лидерборд пазлов</div>
-      <div id="lbPuzzleContent" style="color:rgba(10,26,46,.44);font-size:16px">Загружаем…</div>
-    </div>
-  </div>
-</section>
-
-<div class="divider">✦</div>
 <footer>
   <p>Интерактивная галерея шедевров архитектуры и искусства России</p>
 </footer>
 
-<script src="auth.js"></script>
 <script>
 /* ── Background Logic ── */
 const bgCvs=document.getElementById('bgCanvas'),bgCtx=bgCvs.getContext('2d');let W,H,tick=0;
@@ -276,12 +254,10 @@ function closeMenu(){document.getElementById('navLinks').classList.remove('open'
    PUZZLE IMAGES
 ══════════════════════════════════════════ */
 const IMGS=["pasl1.jpg", "pasl2.jpg", "pasl3.jpg"];
-const PUZZLE_NAMES=["Петергоф","Третьяковская галерея","Эрмитаж"];
+
 const states=[null,null,null];
-const puzzleStartTimes=[null,null,null];
 
 function initPuzzle(idx){
-  puzzleStartTimes[idx] = Date.now();
   const img=new Image();img.src=IMGS[idx];
   img.onload=()=>{
     const cv=document.getElementById('pc0'),ctx=cv.getContext('2d'); // Use actual cv ids pc0, pc1, pc2
@@ -339,10 +315,7 @@ function render(idx){
   document.getElementById(`prl${idx}`).innerText=perc+'%';
   
   if(perc===100 && !st.won){
-    st.won=true;
-    document.getElementById(`win${idx}`).classList.add('show');
-    const timeMs = puzzleStartTimes[idx] ? Date.now() - puzzleStartTimes[idx] : 0;
-    savePuzzleResult(PUZZLE_NAMES[idx], timeMs).then(()=>loadPuzzleLeaderboard());
+    st.won=true;document.getElementById(`win${idx}`).classList.add('show');
   }
 }
 
@@ -401,44 +374,12 @@ function showHint(idx){
   }
 }
 
-async function loadPuzzleLeaderboard() {
-  const lb = document.getElementById('lbPuzzleContent');
-  if (!lb) return;
-  try {
-    const rows = await getLeaderboard('puzzle');
-    if (!rows || rows.length === 0) {
-      lb.innerHTML = '<p style="font-size:16px">Пока нет завершённых пазлов. Попробуйте первыми!</p>';
-      return;
-    }
-    const medals = ['🥇','🥈','🥉'];
-    lb.innerHTML = `<table class="lb-table">
-      <thead><tr>
-        <th class="lb-rank">#</th>
-        <th>Участник</th>
-        <th>Пазл</th>
-        <th>Время</th>
-        <th>Дата</th>
-      </tr></thead>
-      <tbody>${rows.map((r,i)=>{
-        const mins = Math.floor(r.time_ms/60000);
-        const secs = Math.floor((r.time_ms%60000)/1000);
-        const time = `${mins}:${String(secs).padStart(2,'0')}`;
-        const date = new Date(r.completed_at).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'});
-        return `<tr>
-          <td class="lb-rank">${medals[i]||i+1}</td>
-          <td>${r.username||'Аноним'}</td>
-          <td>${r.puzzle_name||'—'}</td>
-          <td>${time}</td>
-          <td>${date}</td>
-        </tr>`;
-      }).join('')}</tbody>
-    </table>`;
-  } catch(e) {
-    lb.innerHTML = '<p style="font-size:15px">Не удалось загрузить таблицу лидеров.</p>';
-  }
-}
+// Start first
+window.onload=()=>switchPuzzle(0);
+</script>
 
-// Init user nav
+<script src="auth.js"></script>
+<script>
 (function(){
   const u = getUser();
   const area = document.getElementById('navUserArea');
@@ -451,9 +392,6 @@ async function loadPuzzleLeaderboard() {
   async function doLogout(){ await signOut(); window.location.href='auth.html'; }
   window.doLogout = doLogout;
 })();
-
-// Start first
-window.onload=()=>{ switchPuzzle(0); loadPuzzleLeaderboard(); };
 </script>
 </body>
 </html>
