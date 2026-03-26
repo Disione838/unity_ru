@@ -130,6 +130,21 @@
   .btn-outline:hover{background:rgba(255,255,255,.9);border-color:var(--accent)}
   .res-sub{font-size:14px;color:var(--text-muted);letter-spacing:.2em}
 
+  /* ── LEADERBOARD ── */
+  .lb-section{width:100%;max-width:800px;margin:0 auto 36px;opacity:0;animation:fadeUp .6s .6s forwards}
+  .lb-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text-main);margin-bottom:16px;text-align:left}
+  .lb-table{width:100%;border-collapse:collapse}
+  .lb-table th{font-size:10px;letter-spacing:.38em;text-transform:uppercase;color:var(--accent);padding:8px 12px;text-align:left;border-bottom:1px solid var(--card-border)}
+  .lb-table td{padding:10px 12px;font-size:17px;font-weight:300;color:var(--text-soft);border-bottom:1px solid rgba(26,63,143,.07)}
+  .lb-table tr:first-child td{color:var(--text-main);font-weight:600}
+  .lb-rank{font-family:'DM Mono',monospace;font-size:13px;color:var(--accent);width:32px}
+  .lb-save-msg{font-size:14px;color:var(--accent);letter-spacing:.14em;margin-top:12px;opacity:0;animation:fadeUp .5s .4s forwards}
+  /* User nav */
+  .nav-user{display:flex;align-items:center;gap:10px}
+  .nav-user-name{font-size:13px;letter-spacing:.08em;color:var(--text-soft);font-family:'Cormorant Garamond',serif;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-user-btn{font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border:1px solid var(--card-border);background:rgba(255,255,255,.45);color:var(--text-soft);border-radius:8px;cursor:pointer;text-decoration:none;font-family:'Cormorant Garamond',serif;font-weight:600;transition:background .2s}
+  .nav-user-btn:hover{background:rgba(255,255,255,.85)}
+
   /* ── FOOTER ── */
   footer{position:relative;z-index:1;padding:36px 24px;text-align:center;border-top:1px solid rgba(26,63,143,.16);background:rgba(255,255,255,.3);backdrop-filter:blur(10px)}
   footer p{font-size:14px;color:var(--text-muted);letter-spacing:.05em;line-height:2.1}
@@ -168,6 +183,7 @@
   </a>
   <div class="nav-right">
     <a href="index.html" class="nav-home-link">← Главная</a>
+    <div id="navUserArea" class="nav-user"></div>
     <div class="nav-date">2 апреля</div>
   </div>
 </nav>
@@ -188,6 +204,7 @@
   </footer>
 </div>
 
+<script src="auth.js"></script>
 <script>
 /* ════════ BACKGROUND (Russian palette) ════════ */
 const canvas=document.getElementById('bgCanvas'),ctx=canvas.getContext('2d');
@@ -254,6 +271,10 @@ const TOTAL=cats.reduce((s,c)=>s+c.qs.length,0);
 /* ════════ STATE ════════ */
 let S={catI:0,qI:0,answered:false,scores:[],correct:0,phase:'intro'};
 let prevCorrect=0;
+let quizStartTime = Date.now();
+
+// Require auth
+if (!requireAuth()) { /* redirected */ }
 
 /* ════════ RENDER ════════ */
 function render(){
@@ -346,12 +367,13 @@ function next(){
 }
 
 /* ════════ RESULTS ════════ */
-function showResults(){
+async function showResults(){
   document.getElementById('quizPage').classList.remove('active');
   const rp=document.getElementById('resultsPage');
   rp.classList.add('active');
   window.scrollTo(0,0);
   const pct=Math.round(S.correct/TOTAL*100);
+  const timeMs = Date.now() - quizStartTime;
   let verdict,emoji;
   if(pct===100){verdict='Вы — настоящий эксперт по России! Браво!';emoji='🏆';}
   else if(pct>=80){verdict='Отличный результат! Россия вами гордится.';emoji='🥇';}
@@ -363,6 +385,8 @@ function showResults(){
   if(pct>=80)medals.push('✦ Знаток России');
   if(S.scores.some(s=>s.sc===s.total))medals.push('✦ Мастер категории');
   const C=2*Math.PI*80;
+  const mins = Math.floor(timeMs/60000), secs = Math.floor((timeMs%60000)/1000);
+  const timeStr = `${mins}:${String(secs).padStart(2,'0')}`;
   const wrap=document.getElementById('resultsWrap');
   wrap.innerHTML=`
     <div style="opacity:0;animation:fadeUp .8s .1s forwards;width:100%;max-width:800px;margin:0 auto">
@@ -373,12 +397,18 @@ function showResults(){
         <div class="ring-inner"><div class="ring-n">${S.correct}</div><div class="ring-of">из ${TOTAL}</div></div>
       </div>
       <p class="res-verdict">${verdict}</p>
+      <p style="font-size:15px;letter-spacing:.2em;color:var(--text-muted);margin-bottom:12px">⏱ Время: ${timeStr}</p>
       ${medals.length?`<div class="medals">${medals.map(m=>`<div class="medal">${m}</div>`).join('')}</div>`:''}
       <div class="breakdown" id="bk"></div>
       <div class="pct-block">
         <div class="pct-label">Ваш результат</div>
         <div class="pct-num">${pct}<span class="pct-sign">%</span></div>
         <div class="pct-bar-wrap"><div class="pct-bar" id="pb"></div></div>
+      </div>
+      <div id="saveMsgArea"></div>
+      <div id="lbArea" class="lb-section">
+        <div class="lb-title">🏅 Таблица лидеров</div>
+        <div id="lbContent" style="color:var(--text-muted);font-size:16px">Загружаем…</div>
       </div>
       <div class="res-btns">
         <button class="btn-primary" onclick="restart()">↺ Пройти ещё раз</button>
@@ -401,16 +431,59 @@ function showResults(){
       <div style="margin-top:6px;font-size:18px">${star}</div>
     </div>`;
   }).join('');
+
+  // Save result
+  const saveR = await saveQuizResult(S.correct, TOTAL, timeMs);
+  const saveArea = document.getElementById('saveMsgArea');
+  if (saveR && saveR.ok) {
+    saveArea.innerHTML = `<p class="lb-save-msg" style="opacity:1">✦ Результат сохранён!</p>`;
+  }
+
+  // Load leaderboard
+  loadLeaderboard();
 }
 
 function restart(){
   S={catI:0,qI:0,answered:false,scores:[],correct:0,phase:'intro'};
   prevCorrect=0;
+  quizStartTime = Date.now();
   document.getElementById('resultsPage').classList.remove('active');
   document.getElementById('quizPage').classList.add('active');
   window.scrollTo(0,0);
   render();
 }
+
+async function loadLeaderboard() {
+  const lb = document.getElementById('lbContent');
+  if (!lb) return;
+  try {
+    const rows = await getLeaderboard('quiz');
+    if (!rows || rows.length === 0) { lb.innerHTML = '<p style="color:var(--text-muted);font-size:16px">Пока нет результатов. Будьте первым!</p>'; return; }
+    const medals = ['🥇','🥈','🥉'];
+    lb.innerHTML = `<table class="lb-table">
+      <thead><tr><th class="lb-rank">#</th><th>Участник</th><th>Правильных</th><th>Процент</th><th>Время</th></tr></thead>
+      <tbody>${rows.map((r,i)=>{
+        const pct = Math.round(r.score/r.total*100);
+        const mins = Math.floor(r.time_ms/60000), secs = Math.floor((r.time_ms%60000)/1000);
+        const time = `${mins}:${String(secs).padStart(2,'0')}`;
+        const medal = medals[i] || (i+1);
+        return `<tr><td class="lb-rank">${medal}</td><td>${r.username||'Аноним'}</td><td>${r.score}/${r.total}</td><td>${pct}%</td><td>${time}</td></tr>`;
+      }).join('')}</tbody>
+    </table>`;
+  } catch(e) { lb.innerHTML = '<p style="color:var(--text-muted);font-size:15px">Не удалось загрузить таблицу.</p>'; }
+}
+
+// Init user nav
+(function(){
+  const u = getUser();
+  const area = document.getElementById('navUserArea');
+  if (u) {
+    const name = (u.user_metadata && u.user_metadata.username) || u.email.split('@')[0];
+    area.innerHTML = `<span class="nav-user-name">👤 ${name}</span><button class="nav-user-btn" onclick="doLogout()">Выйти</button>`;
+  }
+  async function doLogout(){ await signOut(); window.location.href='auth.html'; }
+  window.doLogout = doLogout;
+})();
 
 render();
 </script>

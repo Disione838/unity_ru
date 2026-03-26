@@ -128,6 +128,13 @@
   @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 
   .nav-quiz-pill{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#FFFDF7;background:#1a3f8f;border-radius:8px;padding:8px 18px;text-decoration:none;letter-spacing:.05em;transition:background .2s,transform .2s,box-shadow .2s;box-shadow:0 3px 12px rgba(122,40,0,.25)}
+  /* AUTH UI */
+  .nav-user{display:flex;align-items:center;gap:10px}
+  .nav-user-name{font-size:13px;letter-spacing:.08em;color:var(--text-soft);font-family:'Cormorant Garamond',serif;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-user-btn{font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:7px 16px;border:1px solid var(--card-border);background:rgba(255,255,255,.45);color:var(--text-soft);border-radius:8px;cursor:pointer;text-decoration:none;font-family:'Cormorant Garamond',serif;font-weight:600;transition:background .2s,border-color .2s}
+  .nav-user-btn:hover{background:rgba(255,255,255,.85);border-color:var(--gold)}
+  .nav-user-btn.primary{background:var(--gold);color:#fff;border-color:var(--gold)}
+  .nav-user-btn.primary:hover{background:#0d2660}
   .nav-quiz-pill:hover{background:#0d2660;transform:translateY(-1px);box-shadow:0 6px 20px rgba(122,40,0,.35)}
   @media(max-width:700px){
     .nav-quiz-pill{display:none}  
@@ -171,6 +178,7 @@
     <li><a href="puzzle.html" onclick="closeMenu()">Пазлы</a></li>
     <li><a href="quiz.html" onclick="closeMenu()">Тесты</a></li>
   </ul>
+  <div id="navUserArea" class="nav-user"></div>
   <div class="nav-date">2 апреля</div>
   <button class="nav-burger" id="burger" aria-label="Меню" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -440,6 +448,21 @@ const io = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.12 });
 document.querySelectorAll('.tl-item, .sym-card').forEach(el => io.observe(el));
+<script src="auth.js"></script>
+<script>
+// Init user nav
+(function(){
+  const u = getUser();
+  const area = document.getElementById('navUserArea');
+  if (u) {
+    const name = (u.user_metadata && u.user_metadata.username) || u.email.split('@')[0];
+    area.innerHTML = `<span class="nav-user-name">👤 ${name}</span><button class="nav-user-btn" onclick="doLogout()">Выйти</button>`;
+  } else {
+    area.innerHTML = `<a href="auth.html" class="nav-user-btn primary">Войти</a>`;
+  }
+  async function doLogout(){ await signOut(); location.reload(); }
+  window.doLogout = doLogout;
+})();
 </script>
 </body>
 </html>
